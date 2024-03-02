@@ -79,7 +79,7 @@
                             </div>
                             <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                 <div class="flex-1">
-                                    <a href="{{ route('profile.show', $friend->id) }}" class="block mt-2">
+                                    <a href="{{ route('profile.show', $friend->username) }}" class="block mt-2">
                                         <p class="text-lg font-semibold text-gray-900 dark:text-white">
                                             {{ $friend->first_name }} {{ $friend->last_name }}</p>
                                         <p class="text-sm font-semibold text-gray-900 dark:text-white">
@@ -88,7 +88,7 @@
                                     </a>
                                 </div>
                                 <div class="mt-6 flex justify-between">
-                                    <a href="{{ route('profile.show', $suggestion->id) }}"
+                                    <a href="{{ route('profile.show', $friend->username) }}"
                                         class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
                                         View Profile
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -100,7 +100,7 @@
                                         </svg>
 
                                     </a>
-                                    <a href="{{ route('add-friend', $suggestion->id) }}"
+                                    <a href="{{ route('add-friend', $friend->id) }}"
                                         class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
                                         Add Friends
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -152,7 +152,7 @@
                             </div>
                             <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                 <div class="flex-1">
-                                    <a href="{{ route('profile.show', $request->id) }}" class="block mt-2">
+                                    <a href="{{ route('profile.show', $request->username) }}" class="block mt-2">
                                         <p class="text-lg font-semibold text-gray-900 dark:text-white">
                                             {{ $request->first_name }} {{ $request->last_name }}</p>
                                         <p class="text-sm font-semibold text-gray-900 dark:text-white">
@@ -161,7 +161,7 @@
                                     </a>
                                 </div>
                                 <div class="mt-6">
-                                    <a href="{{ route('profile.show', $request->id) }}"
+                                    <a href="{{ route('profile.show', $request->username) }}"
                                         class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
                                         View Profile
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -235,7 +235,7 @@
                             </div>
                             <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                 <div class="flex-1">
-                                    <a href="{{ route('profile.show', $suggestion->id) }}" class="block mt-2">
+                                    <a href="{{ route('profile.show', $suggestion->username) }}" class="block mt-2">
                                         <p class="text-lg font-semibold text-gray-900 dark:text-white">
                                             {{ $suggestion->first_name }} {{ $suggestion->last_name }}</p>
                                         <p class="text-sm font-semibold text-gray-900 dark:text-white">
@@ -244,7 +244,7 @@
                                     </a>
                                 </div>
                                 <div class="mt-6 flex justify-between">
-                                    <a href="{{ route('profile.show', $suggestion->id) }}"
+                                    <a href="{{ route('profile.show', $suggestion->username) }}"
                                         class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
                                         View Profile
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

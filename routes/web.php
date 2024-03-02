@@ -6,6 +6,7 @@ use App\Livewire\Home;
 use App\Livewire\Components\CreatePost;
 use App\Livewire\Components\ShowPost;
 use App\Livewire\Peoples;
+use App\Livewire\Profile;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,7 @@ use App\Livewire\Peoples;
 
 Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/', Home::class)->name('home');
-    Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/{user:username}', Profile::class)->name('profile.show');
     Route::get('/create-post', CreatePost::class)->name('create-post');
     Route::post('/createpost', [CreatePost::class, 'createpost'])->name('createpost');
     Route::get('/post/{post:uuid}', ShowPost::class)->name('post.show');
