@@ -1,11 +1,38 @@
 {{-- The best athlete wants his opponent at his best. --}}
 @php
-    $friends = App\Models\Friend::where('user_id', auth()->id())->get();
+    $user = auth()->user();
+
+    $friends = App\Models\Friend::where('user_id', auth()->id())->where('status', 'accepted')->get();
+    $get_friends = App\Models\Friend::where('friend_id', auth()->id())->where('status', 'accepted')->get();
+
     $requests = App\Models\Friend::where('friend_id', auth()->id())->get();
+    $get_request = App\Models\Friend::where('friend_id', auth()->id())->where('status', 'pending')->get();
+
     $suggestions = App\Models\User::where('id', '!=', auth()->id())->get();
 @endphp
 <div>
     <div class="mt-4 flex justify-evenly">
+        @if (session()->has('friend_request'))
+            <script>
+                setTimeout(function() {
+                    document.querySelector('.alert').remove();
+                }, 5000);
+            </script>
+            <div
+                class="alert absolute z-10 top-0 right-0 w-auto bg-gray-100 rounded-b-lg border-t-8 border-green-600 px-4 py-4 flex flex-col justify-around shadow-md dark:bg-white text-gray-700 dark:text-gray-700">
+                <div class="flex justify-between items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span class="pl-2 font-bold">{{ session('friend_request') }}</span>
+                </div>
+            </div>
+            @php
+                session()->forget('friend_request');
+            @endphp
+        @endif
         <button
             class="friends flex items-center justify-between w-64 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
             Friends
@@ -64,13 +91,16 @@
                     </button>
                 </div>
             </div>
-            @if ($friends->isEmpty())
+            @if ($friends->isEmpty() && $get_friends->isEmpty())
                 <div class="flex items-center justify-center">
                     <p class="text-xl font-bold text-gray-700 dark:text-gray-100">No Friends</p>
                 </div>
             @else
                 <div class="mt-4 grid gap-6 my-8 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
                     @foreach ($friends as $friend)
+                        @php
+                            $friend = App\Models\User::find($friend->friend_id);
+                        @endphp
                         <div class="flex flex-col rounded-lg shadow-lg">
 
                             <div class="flex-shrink-0">
@@ -100,13 +130,59 @@
                                         </svg>
 
                                     </a>
-                                    <a href="{{ route('add-friend', $friend->id) }}"
-                                        class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-                                        Add Friends
+                                    <a href="{{ route('unfriend', $friend->id) }}"
+                                        class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
+                                        Unfriends
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                    @foreach ($get_friends as $friend)
+                        @php
+                            $friend = App\Models\User::find($friend->user_id);
+                        @endphp
+                        <div class="flex flex-col rounded-lg shadow-lg">
+
+                            <div class="flex-shrink-0">
+                                <img class="w-full h-32 rounded-lg" src="{{ 'images/profiles/' . $friend->profile }}"
+                                    alt="">
+                            </div>
+                            <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
+                                <div class="flex-1">
+                                    <a href="{{ route('profile.show', $friend->username) }}" class="block mt-2">
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {{ $friend->first_name }} {{ $friend->last_name }}</p>
+                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                            {{ '@' . $friend->username }}
+                                        </p>
+                                    </a>
+                                </div>
+                                <div class="mt-6 flex justify-between">
+                                    <a href="{{ route('profile.show', $friend->username) }}"
+                                        class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
+                                        View Profile
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
+
+                                    </a>
+                                    <a href="{{ route('unfriend', $friend->id) }}"
+                                        class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
+                                        Unfriends
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
                                         </svg>
                                     </a>
                                 </div>
@@ -127,13 +203,11 @@
                         class="px-4 py-2 text-sm font-medium text-gray-700 bg-transparent border border-gray-900 rounded-lg dark:border-white dark:text-white dark:bg-gray-800 dark:placeholder-gray-400 focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white">
                     <button
                         class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                         </svg>
-
-
                     </button>
                 </div>
             </div>
@@ -144,59 +218,68 @@
             @else
                 <div class="mt-4 grid gap-6 my-8 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
                     @foreach ($requests as $request)
-                        <div class="flex flex-col rounded-lg shadow-lg">
+                        @php
+                            $request = App\Models\User::find($request->user_id);
+                        @endphp
+                        @if (!$get_request->contains('user_id', $request->id) || $get_request->contains('friend_id', $request->id))
+                            @continue
+                        @else
+                            <div class="flex flex-col rounded-lg shadow-lg">
 
-                            <div class="flex-shrink-0">
-                                <img class="w-full h-32 rounded-lg" src="{{ 'images/profiles/' . $request->profile }}"
-                                    alt="">
-                            </div>
-                            <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
-                                <div class="flex-1">
-                                    <a href="{{ route('profile.show', $request->username) }}" class="block mt-2">
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $request->first_name }} {{ $request->last_name }}</p>
-                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">
-                                            {{ '@' . $request->username }}
-                                        </p>
-                                    </a>
+                                <div class="flex-shrink-0">
+                                    <img class="w-full h-32 rounded-lg"
+                                        src="{{ 'images/profiles/' . $request->profile }}" alt="">
                                 </div>
-                                <div class="mt-6">
-                                    <a href="{{ route('profile.show', $request->username) }}"
-                                        class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-                                        View Profile
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                    </a>
-                                    <div class="flex justify-between">
-                                        <a href="{{ route('accept-friend', $request->id) }}"
-                                            class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-                                            Accept Request
+                                <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
+                                    <div class="flex-1">
+                                        <a href="{{ route('profile.show', $request->username) }}" class="block mt-2">
+                                            <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                {{ $request->first_name }} {{ $request->last_name }}</p>
+                                            <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                                {{ '@' . $request->username }}
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <div class="mt-6">
+                                        <a href="{{ route('profile.show', $request->username) }}"
+                                            class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
+                                            View Profile
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                 class="w-6 h-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                                            </svg>
-                                        </a>
-                                        <a href="{{ route('reject-friend', $request->id) }}"
-                                            class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-                                            Reject Request
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                class="w-6 h-6">
+                                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                             </svg>
                                         </a>
+                                        <div class="flex justify-between mt-2">
+                                            <a href="{{ route('accept-friend', $request->id) }}"
+                                                class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-teal-600 border border-transparent rounded-lg active:bg-teal-600 hover:bg-teal-700 focus:outline-none focus:shadow-outline-purple">
+                                                Accept
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-6 h-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                </svg>
+                                            </a>
+                                            <a href="{{ route('reject-friend', $request->id) }}"
+                                                class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
+                                                Rejects
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-6 h-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                </svg>
+
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             @endif
@@ -227,6 +310,13 @@
             @else
                 <div class="mt-4 grid gap-6 my-8 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
                     @foreach ($suggestions as $suggestion)
+                        @if (
+                            $get_request->contains('user_id', $suggestion->id) ||
+                                $get_request->contains('friend_id', $suggestion->id) ||
+                                $friends->contains('friend_id', $suggestion->id) ||
+                                $get_friends->contains('user_id', $suggestion->id))
+                            @continue
+                        @endif
                         <div class="flex flex-col rounded-lg shadow-lg">
 
                             <div class="flex-shrink-0">
@@ -235,6 +325,7 @@
                             </div>
                             <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                 <div class="flex-1">
+
                                     <a href="{{ route('profile.show', $suggestion->username) }}" class="block mt-2">
                                         <p class="text-lg font-semibold text-gray-900 dark:text-white">
                                             {{ $suggestion->first_name }} {{ $suggestion->last_name }}</p>
@@ -256,19 +347,77 @@
                                         </svg>
 
                                     </a>
-                                    <a href="{{ route('add-friend', $suggestion->id) }}"
-                                        class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-                                        Add Friends
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                                        </svg>
-                                    </a>
+                                    @if (App\Models\Friend::Where([
+                                            'friend_id' => $suggestion->id,
+                                            'user_id' => auth()->id(),
+                                            'status' => 'pending',
+                                        ])->exists())
+                                        <a href="{{ route('cancle-friend', $suggestion->id) }}"
+                                            class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
+                                            Cancle
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                            </svg>
+
+                                        </a>
+                                    @elseif (App\Models\Friend::Where([
+                                            'friend_id' => auth()->id(),
+                                            'user_id' => $user->id,
+                                            'status' => 'rejected',
+                                        ])->exists())
+                                        <a href="{{ route('add-friend', $suggestion->id) }}"
+                                            class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
+                                            Add Friends
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                            </svg>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('add-friend', $suggestion->id) }}"
+                                            class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
+                                            Add Friends
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                            </svg>
+                                        </a>
+                                    @endif
+                                    {{-- @if ($suggestion->is_friend() == '')
+                                        <a href="{{ route('add-friend', $suggestion->id) }}"
+                                            class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
+                                            Add Friends
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                            </svg>
+                                        </a>
+                                    @elseif($suggestion->is_friend() == 'pending')
+                                        <a href="{{ route('cancle-friend', $suggestion->id) }}"
+                                            class="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
+                                            Cancle
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                            </svg>
+                                        </a>
+                                    @endif --}}
                                 </div>
                             </div>
                         </div>
                     @endforeach
+
                 </div>
             @endif
 

@@ -29,9 +29,10 @@ Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/post/{post:id}/dislike', [Home::class, 'dislike'])->name('post.dislike');
     Route::post('/post/{post:id}/comment', [ShowPost::class, 'saveComment'])->name('post.comment');
     Route::get('/friends', Peoples::class)->name('friends');
-    Route::get('/add-friend/{user:username}', [Peoples::class, 'addFriend'])->name('add-friend');
-    Route::get('/remove-friend/{user:username}', [Peoples::class, 'removeFriend'])->name('remove-friend');
-    Route::get('/accept-friend/{user:username}', [Peoples::class, 'acceptFriend'])->name('accept-friend');
+    Route::get('/add-friend/{user:id}', [Peoples::class, 'addFriend'])->name('add-friend');
+    Route::get('/unfriend/{user:id}', [Peoples::class, 'unFriend'])->name('unfriend');
+    Route::get('/cancle-friend/{user:id}', [Peoples::class, 'cancleFriend'])->name('cancle-friend');
+    Route::get('/accept-friend/{user:id}', [Peoples::class, 'acceptFriend'])->name('accept-friend');
     Route::get('/reject-friend/{user:username}', [Peoples::class, 'rejectFriend'])->name('reject-friend');
 });
 

@@ -46,6 +46,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function is_friend()
+    {
+        return (Friend::where(['user_id' => $this->id])->orWhere('friend_id', $this->id)->first()->status ?? "");
+    }
+
     /**
      * The attributes that should be cast.
      *
