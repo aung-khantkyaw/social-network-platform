@@ -31,6 +31,7 @@ class ProfileEdit extends Component
                 'college' => $request->college,
                 'university' => $request->university,
                 'relationship' => $request->relationship,
+                'partner' => $request->partner,
                 'work' => $request->work,
                 'address' => $request->address,
                 'website' => $request->website,

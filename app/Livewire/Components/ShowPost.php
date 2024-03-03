@@ -7,6 +7,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 class ShowPost extends Component
@@ -17,16 +18,6 @@ class ShowPost extends Component
     {
         return view('livewire.components.show-post')->extends('layouts.app');
     }
-
-    // public function show(Post $post)
-    // {
-    //     return view('livewire.components.show-post', compact('post'))->extends('layouts.app');
-    // }
-
-    // public function comments()
-    // {
-    //     return $this->hasMany(Comment::class)->where('status', 'published');
-    // }
 
     public function saveComment($post_id, Request $request)
     {
@@ -51,5 +42,14 @@ class ShowPost extends Component
         unset($this->comment);
 
         return redirect()->back();
+    }
+
+    public function deletePost($post_id)
+    {
+        // search post by uuid
+        $post = Post::where('uuid', $post_id)->first();
+        // delete post
+        $post->delete();
+        return redirect()->route('profile.show', Auth::user()->username);
     }
 }

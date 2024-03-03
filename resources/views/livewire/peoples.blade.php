@@ -11,7 +11,7 @@
     $suggestions = App\Models\User::where('id', '!=', auth()->id())->get();
 @endphp
 <div class="container px-6 mx-auto grid">
-    <div class="mt-4 flex justify-evenly">
+    <div class="my-4 flex justify-evenly">
         @if (session()->has('friend_request'))
             <script>
                 setTimeout(function() {
@@ -76,20 +76,6 @@
         <div class="friends_section ">
             <div class="flex items-center justify-between ">
                 <h2 class="text-xl font-bold text-gray-700 dark:text-gray-100">Friends</h2>
-                <div class="flex items-center">
-                    <input type="text" wire:model="search" placeholder="Search..."
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-transparent border border-gray-900 rounded-lg dark:border-white dark:text-white dark:bg-gray-800 dark:placeholder-gray-400 focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white">
-                    <button
-                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                        </svg>
-
-
-                    </button>
-                </div>
             </div>
             @if ($friends->isEmpty() && $get_friends->isEmpty())
                 <div class="flex items-center justify-center">
@@ -104,18 +90,25 @@
                         <div class="flex flex-col rounded-lg shadow-lg">
 
                             <div class="flex-shrink-0">
-                                <img class="w-full h-32 rounded-lg" src="{{ 'images/profiles/' . $friend->profile }}"
-                                    alt="">
+                                @if ($friend->thumbnail)
+                                    <img class="w-full h-32 rounded-lg"
+                                        src="{{ 'images/profiles/thumbnails/' . $friend->thumbnail }}" alt="">
+                                @else
+                                    <img class="w-full h-32 rounded-lg" src="https://picsum.photos/200/300"
+                                        alt="">
+                                @endif
                             </div>
                             <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
-                                <div class="flex-1">
-                                    <a href="{{ route('profile.show', $friend->username) }}" class="block mt-2">
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $friend->first_name }} {{ $friend->last_name }}</p>
-                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">
-                                            {{ '@' . $friend->username }}
-                                        </p>
-                                    </a>
+                                <div class="flex flex-1">
+                                    <img src="{{ 'images/profiles/' . $friend->profile }}" alt="Avatar"
+                                        class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <h2 class="text-sm font-medium text-gray-700 dark:text-gray-200">
+                                            {{ $friend->first_name }} {{ $friend->last_name }}
+                                        </h2>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                                            {{ '@' . $friend->username }}</p>
+                                    </div>
                                 </div>
                                 <div class="mt-6 flex justify-between">
                                     <a href="{{ route('profile.show', $friend->username) }}"
@@ -150,18 +143,25 @@
                         <div class="flex flex-col rounded-lg shadow-lg">
 
                             <div class="flex-shrink-0">
-                                <img class="w-full h-32 rounded-lg" src="{{ 'images/profiles/' . $friend->profile }}"
-                                    alt="">
+                                @if ($friend->thumbnail)
+                                    <img class="w-full h-32 rounded-lg"
+                                        src="{{ 'images/profiles/thumbnails/' . $friend->thumbnail }}" alt="">
+                                @else
+                                    <img class="w-full h-32 rounded-lg" src="https://picsum.photos/200/300"
+                                        alt="">
+                                @endif
                             </div>
                             <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
-                                <div class="flex-1">
-                                    <a href="{{ route('profile.show', $friend->username) }}" class="block mt-2">
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $friend->first_name }} {{ $friend->last_name }}</p>
-                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">
-                                            {{ '@' . $friend->username }}
-                                        </p>
-                                    </a>
+                                <div class="flex flex-1">
+                                    <img src="{{ 'images/profiles/' . $friend->profile }}" alt="Avatar"
+                                        class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <h2 class="text-sm font-medium text-gray-700 dark:text-gray-200">
+                                            {{ $friend->first_name }} {{ $friend->last_name }}
+                                        </h2>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                                            {{ '@' . $friend->username }}</p>
+                                    </div>
                                 </div>
                                 <div class="mt-6 flex justify-between">
                                     <a href="{{ route('profile.show', $friend->username) }}"
@@ -191,25 +191,11 @@
                     @endforeach
                 </div>
             @endif
-
-
         </div>
 
         <div class="hidden request_section">
             <div class="flex items-center justify-between ">
                 <h2 class="text-xl font-bold text-gray-700 dark:text-gray-100">Friend Request</h2>
-                <div class="flex items-center">
-                    <input type="text" wire:model="search" placeholder="Search..."
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-transparent border border-gray-900 rounded-lg dark:border-white dark:text-white dark:bg-gray-800 dark:placeholder-gray-400 focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white">
-                    <button
-                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                        </svg>
-                    </button>
-                </div>
             </div>
             @if ($requests->isEmpty())
                 <div class="flex items-center justify-center">
@@ -227,18 +213,26 @@
                             <div class="flex flex-col rounded-lg shadow-lg">
 
                                 <div class="flex-shrink-0">
-                                    <img class="w-full h-32 rounded-lg"
-                                        src="{{ 'images/profiles/' . $request->profile }}" alt="">
+                                    @if ($request->thumbnail)
+                                        <img class="w-full h-32 rounded-lg"
+                                            src="{{ 'images/profiles/thumbnails/' . $request->thumbnail }}"
+                                            alt="">
+                                    @else
+                                        <img class="w-full h-32 rounded-lg" src="https://picsum.photos/200/300"
+                                            alt="">
+                                    @endif
                                 </div>
                                 <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
-                                    <div class="flex-1">
-                                        <a href="{{ route('profile.show', $request->username) }}" class="block mt-2">
-                                            <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                {{ $request->first_name }} {{ $request->last_name }}</p>
-                                            <p class="text-sm font-semibold text-gray-900 dark:text-white">
-                                                {{ '@' . $request->username }}
-                                            </p>
-                                        </a>
+                                    <div class="flex flex-1">
+                                        <img src="{{ 'images/profiles/' . $request->profile }}" alt="Avatar"
+                                            class="w-12 h-12 rounded-full mr-4">
+                                        <div>
+                                            <h2 class="text-sm font-medium text-gray-700 dark:text-gray-200">
+                                                {{ $request->first_name }} {{ $request->last_name }}
+                                            </h2>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">
+                                                {{ '@' . $request->username }}</p>
+                                        </div>
                                     </div>
                                     <div class="mt-6">
                                         <a href="{{ route('profile.show', $request->username) }}"
@@ -288,20 +282,6 @@
         <div class="hidden suggestions_section">
             <div class="flex items-center justify-between ">
                 <h2 class="text-xl font-bold text-gray-700 dark:text-gray-100">Suggestion</h2>
-                <div class="flex items-center">
-                    <input type="text" wire:model="search" placeholder="Search..."
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-transparent border border-gray-900 rounded-lg dark:border-white dark:text-white dark:bg-gray-800 dark:placeholder-gray-400 focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white">
-                    <button
-                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                        </svg>
-
-
-                    </button>
-                </div>
             </div>
             @if ($suggestions->isEmpty())
                 <div class="flex items-center justify-center">
@@ -320,19 +300,26 @@
                         <div class="flex flex-col rounded-lg shadow-lg">
 
                             <div class="flex-shrink-0">
-                                <img class="w-full h-32 rounded-lg"
-                                    src="{{ 'images/profiles/' . $suggestion->profile }}" alt="">
+                                @if ($suggestion->thumbnail)
+                                    <img class="w-full h-32 rounded-lg"
+                                        src="{{ 'images/profiles/thumbnails/' . $suggestion->thumbnail }}"
+                                        alt="">
+                                @else
+                                    <img class="w-full h-32 rounded-lg" src="https://picsum.photos/200/300"
+                                        alt="">
+                                @endif
                             </div>
                             <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
-                                <div class="flex-1">
-
-                                    <a href="{{ route('profile.show', $suggestion->username) }}" class="block mt-2">
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $suggestion->first_name }} {{ $suggestion->last_name }}</p>
-                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">
-                                            {{ '@' . $suggestion->username }}
-                                        </p>
-                                    </a>
+                                <div class="flex flex-1">
+                                    <img src="{{ 'images/profiles/' . $suggestion->profile }}" alt="Avatar"
+                                        class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <h2 class="text-sm font-medium text-gray-700 dark:text-gray-200">
+                                            {{ $suggestion->first_name }} {{ $suggestion->last_name }}
+                                        </h2>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                                            {{ '@' . $suggestion->username }}</p>
+                                    </div>
                                 </div>
                                 <div class="mt-6 flex justify-between">
                                     <a href="{{ route('profile.show', $suggestion->username) }}"
