@@ -10,7 +10,7 @@
 
     $suggestions = App\Models\User::where('id', '!=', auth()->id())->get();
 @endphp
-<div>
+<div class="container px-6 mx-auto grid">
     <div class="mt-4 flex justify-evenly">
         @if (session()->has('friend_request'))
             <script>

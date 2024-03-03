@@ -20,10 +20,16 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->text('description')->nullable();
-            $table->string('thumbnial')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->string('profile')->nullable();
             $table->enum('gender', ['male', 'female', 'custom']);
-            $table->enum('relationship', ['single', 'married', 'engage']);
+            $table->enum('relationship', ['single', 'relationship', 'married', 'engage']);
+            $table->string('partner')->nullable();
+            $table->string('school')->nullable();
+            $table->string('college')->nullable();
+            $table->string('university')->nullable();
+            $table->string('work')->nullable();
+            $table->string('website')->nullable();
             $table->string('location')->nullable();
             $table->string('address')->nullable();
             $table->boolean('is_private')->default(0);

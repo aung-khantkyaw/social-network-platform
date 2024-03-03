@@ -202,7 +202,7 @@
                     </div>
                 </label>
 
-                <label class="block mt-2 text-sm">
+                <div class="block mt-2 text-sm">
                     <div class="relative text-gray-500 focus-within:text-purple-600">
                         <div
                             class="block w-full mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input">
@@ -210,22 +210,22 @@
                                 <div class="flex items bg-transparent items-center">
                                     <input type="radio" name="gender" id="male" value="male"
                                         class="form-radio">
-                                    <span class="pl-2">Male</span>
+                                    <label for="male" class="pl-2">Male</label>
                                 </div>
                                 <div class="flex items bg-transparent items-center">
                                     <input type="radio" name="gender" id="female" value="female"
                                         class="form-radio">
-                                    <span class="pl-2">Female</span>
+                                    <label for="female" class="pl-2">Female</label>
                                 </div>
                                 <div class="flex items bg-transparent items-center">
                                     <input type="radio" name="gender" id="custom" value="custom"
                                         class="form-radio">
-                                    <span class="pl-2">Custom</span>
+                                    <label for="custom" class="pl-2">Custom</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </label>
+                </div>
 
 
 

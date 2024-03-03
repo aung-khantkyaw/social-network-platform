@@ -2,7 +2,6 @@
 
     <div class="w-3/4 max-w-md bg-gray-100 rounded-lg shadow-xs dark:bg-gray-800 p-6 mt-2">
 
-        {{-- check has section or not if section has, show alert about 5 sec and then remove section --}}
         @if (session()->has('message'))
             <script>
                 setTimeout(function() {
@@ -24,8 +23,6 @@
                 session()->forget('message');
             @endphp
         @endif
-        {{-- <form wire:submit.prevent="createpost" class="flex flex-col" action="" method=""
-            enctype="multipart/form-data"> --}}
         @foreach ($errors->all() as $error)
             <div class="text-red-600" role="alert">
                 {{ $error }}

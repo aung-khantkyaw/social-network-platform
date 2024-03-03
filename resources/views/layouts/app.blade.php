@@ -27,9 +27,7 @@
         <div class="flex flex-col flex-1 w-full">
             @include('layouts.navigation')
             <main class="h-full overflow-y-auto">
-                <div class="container px-6 mx-auto grid">
-                    @yield('content')
-                </div>
+                @yield('content')
             </main>
         </div>
     </div>
