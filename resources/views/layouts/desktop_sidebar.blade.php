@@ -4,6 +4,11 @@
         $path = $parsedUrl['path'];
         $pathSegments = explode('/', $path);
         $postType = $pathSegments[1];
+
+        $notifications = App\Models\Notification::where('user_id', auth()->id())
+            ->where('read_at', null)
+            ->orderBy('created_at', 'desc')
+            ->get();
     @endphp
     <!-- Desktop sidebar -->
     <aside class="z-20 hidden w-64 overflow-y-auto bg-gray-100 dark:bg-gray-800 md:block flex-shrink-0">
@@ -144,15 +149,20 @@
                 </li>
                 <li class="relative px-6 py-1" id="notifications.html">
                     <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="notifications.html">
+                        href="{{ route('notification') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                         </svg>
 
-                        <span class="ml-4">Notifications</span>
-                        @if ($postType == 'notifications')
+                        <span class="mx-4">Notifications</span>
+                        @if (count($notifications) > 0)
+                            <span
+                                class="ml-4 bg-red-600 px-2 rounded-md text-white font-bold">{{ $notifications->count() }}</span>
+                        @endif
+
+                        @if ($postType == 'notification')
                             <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
                                 aria-hidden="true"></span>
                         @endif
@@ -195,9 +205,9 @@
                         @endif
                     </a>
                 </li>
-                <li class="relative px-6 py-1" id="save_posts.html">
+                <li class="relative px-6 py-1">
                     <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="save_posts.html">
+                        href="{{ route('save-posts') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -205,7 +215,7 @@
                         </svg>
 
                         <span class="ml-4">Save Posts</span>
-                        @if ($postType == 'save_posts')
+                        @if ($postType == 'save-posts')
                             <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
                                 aria-hidden="true"></span>
                         @endif

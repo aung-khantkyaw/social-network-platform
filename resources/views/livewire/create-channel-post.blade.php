@@ -1,3 +1,9 @@
+{{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
+@php
+    $path = parse_url(url()->current())['path'];
+    $uuid = substr($path, strrpos($path, '/') + 1);
+    $channel = \App\Models\Page::where('uuid', $uuid)->first();
+@endphp
 <div class="flex flex-col items-center">
 
     <div class="w-3/4 max-w-md bg-gray-100 rounded-lg shadow-xs dark:bg-gray-800 p-6 mt-2">
@@ -28,9 +34,11 @@
                 {{ $error }}
             </div>
         @endforeach
-        <form class="flex flex-col" method="POST" action="{{ route('createpost') }}" enctype="multipart/form-data">
-            @csrf
 
+        <form class="flex flex-col" method="POST" action="{{ route('channel.createpost', $uuid) }}"
+            enctype="multipart/form-data">
+            @csrf
+            <input type="text" name="page_id" id="" value="{{ $channel->id }}" hidden>
             <div class="flex flex-col items-center justify-center w-full  mb-4">
                 <label for="dropzone-file"
                     class="drop_area flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -158,6 +166,8 @@
         </form>
     </div>
 </div>
+
+
 <script>
     $(document).ready(function() {
         if (window.File && window.FileList && window.FileReader) {

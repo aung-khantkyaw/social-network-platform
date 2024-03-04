@@ -26,9 +26,9 @@ class Peoples extends Component
                 'friend_id' => $id,
             ]);
             Notification::create([
-                "type" => "friend_request",
+                "type" => "Friend Request",
                 "user_id" => $id,
-                "message" => auth()->user()->name . " sent you a friend request",
+                "message" => auth()->user()->username . " sent you a friend request",
                 "url" => "/friends"
             ]);
             DB::commit();
@@ -37,7 +37,7 @@ class Peoples extends Component
             throw $e;
             session()->flash('error', 'Something went wrong');
         }
-        session()->flash('friend_request', 'Friend request sent to ' . $user->username);
+        session()->flash('message', 'Friend request sent to ' . $user->username);
         return redirect()->back();
     }
 
@@ -75,10 +75,10 @@ class Peoples extends Component
             $req->status = "accepted";
             $req->save();
             Notification::create([
-                "type" => "friend_accepted",
+                "type" => "Friend Request Accepted",
                 "user_id" => $user->id,
-                "message" => auth()->user()->name . " accepted your friend request",
-                "url" => "#"
+                "message" => auth()->user()->username . " accepted your friend request",
+                "url" => "/friends"
             ]);
             DB::commit();
         } catch (\Exception $e) {
@@ -86,7 +86,7 @@ class Peoples extends Component
             throw $e;
             session()->flash('error', 'Something went wrong');
         }
-        session()->flash('friend_request', 'Accept Friend request From ' . $user->username);
+        session()->flash('message', 'Accept Friend request From ' . $user->username);
         return redirect()->back();
     }
 
@@ -108,7 +108,7 @@ class Peoples extends Component
             throw $e;
             session()->flash('error', 'Something went wrong');
         }
-        session()->flash('friend_request', 'Reject Friend request From ' . $user->username);
+        session()->flash('message', 'Reject Friend request From ' . $user->username);
         return redirect()->back();
     }
 
@@ -127,7 +127,7 @@ class Peoples extends Component
             $friendship2->delete();
         }
 
-        session()->flash('friend_request', 'Unfriend ' . $user->username);
+        session()->flash('message', 'Unfriend ' . $user->username);
         return redirect()->back();
     }
 }

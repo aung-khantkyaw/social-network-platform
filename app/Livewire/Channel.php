@@ -24,11 +24,14 @@ class Channel extends Component
                 'page_id' => $id,
                 'user_id' => auth()->id()
             ]);
+            $page->update([
+                'members' => $page->members + 1
+            ]);
             Notification::create([
-                'user_id' => $page->user_id,
-                'type' => 'follow',
-                'message' => auth()->user()->name . ' followed your channel',
-                'url' => '#'
+                "type" => "Follow Channel",
+                "user_id" => $page->user_id,
+                "message" => auth()->user()->username . " followed your channel",
+                "url" => "/channel/" . $page->uuid
             ]);
             DB::commit();
         } catch (\Throwable $th) {
@@ -44,6 +47,9 @@ class Channel extends Component
         DB::beginTransaction();
         try {
             PageLike::where('page_id', $id)->where('user_id', auth()->id())->delete();
+            $page->update([
+                'members' => $page->members - 1
+            ]);
             // Notification::where('user_id', $page->user_id)->where('type', 'follow')->where('message', auth()->user()->name . ' followed your channel')->delete();
             DB::commit();
         } catch (\Throwable $th) {

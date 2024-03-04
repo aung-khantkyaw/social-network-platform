@@ -78,9 +78,9 @@
                                             <h2 class="text-sm font-medium text-gray-700 dark:text-gray-200">
                                                 {{ $channel->name }}
                                             </h2>
-                                            @if ($followers_count > 0)
+                                            @if ($channel->members > 0)
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                    {{ $followers_count }} Followers
+                                                    {{ $channel->members }} Followers
                                                 </p>
                                             @endif
                                         </div>
@@ -97,10 +97,9 @@
                     @endforeach
                 </div>
             @else
-                <div class="flex items-center justify-center h-144">
-                    <div class="text-center">
-                        <img src="{{ asset('images/website/page_not_found_dark.gif') }}" alt=""
-                            class="imageLightDark">
+                <div class="flex flex-col items-center justify-center h-144">
+                    <img src="{{ asset('images/website/zoom.gif') }}" alt="" width="150px">
+                    <div class="text-center mt-6">
                         <h1 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">No Channels Found!</h1>
                         <p class="text-gray-500 dark:text-gray-300 mt-2">There is no channel that you followed. Please
                             check back later.</p>
@@ -134,9 +133,9 @@
                                             <h2 class="text-sm font-medium text-gray-700 dark:text-gray-200">
                                                 {{ $channel->name }}
                                             </h2>
-                                            @if ($followers_count > 0)
+                                            @if ($channel->members > 0)
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                    {{ $followers_count }} Followers
+                                                    {{ $channel->members }} Followers
                                                 </p>
                                             @endif
                                         </div>
@@ -153,10 +152,9 @@
                     @endforeach
                 </div>
             @else
-                <div class="flex items-center justify-center h-144">
-                    <div class="text-center">
-                        <img src="{{ asset('images/website/page_not_found_dark.gif') }}" alt=""
-                            class="imageLightDark">
+                <div class="flex flex-col items-center justify-center h-144">
+                    <img src="{{ asset('images/website/zoom.gif') }}" alt="" width="150px">
+                    <div class="text-center mt-6">
                         <h1 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">No Channels Found!</h1>
                         <p class="text-gray-500 dark:text-gray-300 mt-2">There is no channel that you created. Please
                             check back later.</p>
@@ -174,7 +172,6 @@
     let follow_section = document.querySelector('.follow_section');
     let own_section = document.querySelector('.own_section');
 
-    // add class and remove class
     follow.addEventListener('click', () => {
         follow_section.classList.remove('hidden');
         own_section.classList.add('hidden');

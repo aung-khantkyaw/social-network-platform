@@ -1120,6 +1120,10 @@ video {
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
+.mx-4 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
 .mx-auto {
     margin-left: auto;
     margin-right: auto;
@@ -1265,6 +1269,9 @@ video {
 }
 .max-w-4xl {
     max-width: 56rem;
+}
+.min-h-5 {
+    min-height: 1.25rem;
 }
 .min-h-xs {
     min-height: 20rem;
@@ -1920,6 +1927,10 @@ video {
 .gap-6 {
     grid-gap: 1.5rem;
     gap: 1.5rem;
+}
+.gap-12 {
+    grid-gap: 3rem;
+    gap: 3rem;
 }
 .col-span-2 {
     grid-column: span 2 / span 2;

@@ -1,3 +1,12 @@
+{{-- Care about people's approval and you will be their prisoner. --}}
+@php
+    $path = parse_url(url()->current())['path'];
+    $uuid = substr($path, strrpos($path, '/') + 1);
+    $post = App\Models\Post::where('uuid', $uuid)->first();
+    if ($post->page_id) {
+        $channel = App\Models\Page::where('id', $post->page_id)->first();
+    }
+@endphp
 <div class="flex flex-col items-center">
 
     <div class="w-3/4 max-w-md bg-gray-100 rounded-lg shadow-xs dark:bg-gray-800 p-6 mt-2">
@@ -28,13 +37,15 @@
                 {{ $error }}
             </div>
         @endforeach
-        <form class="flex flex-col" method="POST" action="{{ route('createpost') }}" enctype="multipart/form-data">
+        <form class="flex flex-col" method="POST" action="{{ route('post.edit', $uuid) }}"
+            enctype="multipart/form-data">
             @csrf
 
+            <input type="text" name="post_id" id="" hidden value="{{ $post->id }}">
             <div class="flex flex-col items-center justify-center w-full  mb-4">
                 <label for="dropzone-file"
                     class="drop_area flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                    <div class="img_view flex flex-col items-center justify-center pt-5 pb-6">
+                    <div class="img_view flex flex-col items-center justify-center pt-5 pb-6 h-64 w-full">
                         <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -45,12 +56,13 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF
                             (MAX. 5MB)</p>
                     </div>
-                    <input id="dropzone-file" type="file" class="hidden" name="thumbnail" required />
+                    <input id="dropzone-file" type="file" class="hidden" name="thumbnail" required
+                        value="{{ $post->thumbnail }}" />
                 </label>
 
                 <label class="w-full text-sm mt-4">
                     <div class="relative text-gray-500 focus-within:text-purple-600">
-                        <input type="text" name="title" id="title"
+                        <input type="text" name="title" id="title" value="{{ $post->title }}"
                             class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
                             placeholder="Your Post's Title" />
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none" id="title-icon">
@@ -110,20 +122,7 @@
 
                 <label for="files"
                     class="hidden imgs_upload flex flex-row items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                    <div class="img_view flex flex-col items-center justify-center pt-5 pb-6">
-                        <div class="bg flex flex-col items-center justify-center">
-                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                            </svg>
-                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click
-                                    to
-                                    upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF
-                                (MAX. 5MB)</p>
-                        </div>
+                    <div class="img_view flex flex-col items-center justify-center pt-5 pb-6 overflow-x-auto">
                     </div>
                     <input type="file" id="files" class="hidden" name="images[]" multiple />
                 </label>
@@ -151,9 +150,7 @@
                         "See docs to implement AI Assistant")),
                 });
             </script>
-            <textarea placeholder="Cover Letter" id="content" name="content"></textarea>
-
-
+            <textarea placeholder="Cover Letter" id="content" name="content">{{ $post->content }}</textarea>
             <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4" type="submit">Post</button>
         </form>
     </div>

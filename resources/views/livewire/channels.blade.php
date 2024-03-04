@@ -1,7 +1,7 @@
 {{-- If you look to others for fulfillment, you will never truly be fulfilled. --}}
 @php
-    $channels = \App\Models\Page::all()->where('user_id', '!=', auth()->id());
-    $followers_count = \App\Models\Follower::all()->count();
+    // Get all channels except the user's own channels and the channels the user is already following
+$channels = \App\Models\Page::all()->where('user_id', '!=', auth()->id());
 @endphp
 <div class="container px-6 mx-auto grid">
     <div class="mt-4 p-4 rounded-lg bg-blue-100 shadow-md dark:bg-gray-700">
@@ -31,9 +31,9 @@
                                             <h2 class="text-sm font-medium text-gray-700 dark:text-gray-200">
                                                 {{ $channel->name }}
                                             </h2>
-                                            @if ($followers_count > 0)
+                                            @if ($channel->members > 0)
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                    {{ $followers_count }} Followers
+                                                    {{ $channel->members }} Followers
                                                 </p>
                                             @endif
                                         </div>
@@ -55,8 +55,9 @@
                 @endforeach
             </div>
         @else
-            <div class="flex items-center justify-center h-160">
-                <div class="text-center">
+            <div class="flex flex-col items-center justify-center h-160">
+                <img src="{{ asset('images/website/zoom.gif') }}" alt="" width="150px">
+                <div class="text-center mt-6">
                     <h1 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">No Channels Found</h1>
                     <p class="text-gray-500 dark:text-gray-300 mt-2">No channels found. Please check back later.</p>
                 </div>

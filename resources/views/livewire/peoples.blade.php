@@ -5,7 +5,7 @@
     $friends = App\Models\Friend::where('user_id', auth()->id())->where('status', 'accepted')->get();
     $get_friends = App\Models\Friend::where('friend_id', auth()->id())->where('status', 'accepted')->get();
 
-    $requests = App\Models\Friend::where('friend_id', auth()->id())->get();
+    // $get_request = App\Models\Friend::where('friend_id', auth()->id())->get();
     $get_request = App\Models\Friend::where('friend_id', auth()->id())->where('status', 'pending')->get();
 
     $suggestions = App\Models\User::where('id', '!=', auth()->id())->get();
@@ -197,13 +197,13 @@
             <div class="flex items-center justify-between ">
                 <h2 class="text-xl font-bold text-gray-700 dark:text-gray-100">Friend Request</h2>
             </div>
-            @if ($requests->isEmpty())
+            @if ($get_request->isEmpty())
                 <div class="flex items-center justify-center">
                     <p class="text-xl font-bold text-gray-700 dark:text-gray-100">No Friend Request</p>
                 </div>
             @else
                 <div class="mt-4 grid gap-6 my-8 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-                    @foreach ($requests as $request)
+                    @foreach ($get_request as $request)
                         @php
                             $request = App\Models\User::find($request->user_id);
                         @endphp
