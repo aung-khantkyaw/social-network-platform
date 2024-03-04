@@ -42,7 +42,6 @@ class CreateChannel extends Component
             $path = public_path('images/pages');
             $request->icon->move($path, $icon);
 
-
             $thumbnail = time() . '.' . $request->thumbnail->extension();
             $path = public_path('images/pages/thumbnails');
             $request->thumbnail->move($path, $thumbnail);
@@ -51,7 +50,7 @@ class CreateChannel extends Component
                 'uuid' => Str::uuid(),
                 'user_id' => auth()->id(),
                 'icon' => $icon,
-                'thumbnial' => $thumbnail,
+                'thumbnail' => $thumbnail,
                 'description' => $request->description,
                 'name' => $request->name,
                 'location' => $request->location,

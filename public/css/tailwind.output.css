@@ -1056,6 +1056,12 @@ video {
 .h-128 {
     height: 32rem;
 }
+.h-144 {
+    height: 36rem;
+}
+.h-160 {
+    height: 40rem;
+}
 .h-1\/2 {
     height: 50%;
 }

@@ -8,9 +8,10 @@ use App\Livewire\Components\ShowPost;
 use App\Livewire\Peoples;
 use App\Livewire\Profile;
 use App\Livewire\ProfileEdit;
-use App\Livewire\CreateChannel;
 use App\Livewire\Channel;
 use App\Livewire\Channels;
+use App\Livewire\CreateChannel;
+use App\Livewire\MyChannels;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +54,9 @@ Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/create-channel', CreateChannel::class)->name('create-channel');
     Route::post('/create-channel', [CreateChannel::class, 'createChannel'])->name('create-channel');
     Route::get('/channels', Channels::class)->name('channels');
-    Route::get('/channel/{page:id}', Channel::class)->name('channel.show');
+    Route::get('/my-channels', MyChannels::class)->name('my-channels');
+    Route::get('/channel/{page:uuid}', Channel::class)->name('channel.show');
+    Route::get('/follow-channel/{page:id}', [Channel::class, 'followChannel'])->name('follow-channel');
 });
 
 // Route::get('/', Home::class)->middleware(['auth', 'verified', 'VerifiedUser']);
