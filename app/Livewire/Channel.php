@@ -37,4 +37,19 @@ class Channel extends Component
         }
         return redirect()->back();
     }
+
+    public function unfollowChannel($id)
+    {
+        $page = Page::findOrFail($id);
+        DB::beginTransaction();
+        try {
+            PageLike::where('page_id', $id)->where('user_id', auth()->id())->delete();
+            // Notification::where('user_id', $page->user_id)->where('type', 'follow')->where('message', auth()->user()->name . ' followed your channel')->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        return redirect()->back();
+    }
 }

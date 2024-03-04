@@ -57,6 +57,7 @@ Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/my-channels', MyChannels::class)->name('my-channels');
     Route::get('/channel/{page:uuid}', Channel::class)->name('channel.show');
     Route::get('/follow-channel/{page:id}', [Channel::class, 'followChannel'])->name('follow-channel');
+    Route::get('/unfollow-channel/{page:id}', [Channel::class, 'unfollowChannel'])->name('unfollow-channel');
 });
 
 // Route::get('/', Home::class)->middleware(['auth', 'verified', 'VerifiedUser']);
