@@ -9,11 +9,50 @@
             ->where('read_at', null)
             ->orderBy('created_at', 'desc')
             ->get();
+
     @endphp
+
+    <script>
+        function accountDelete() {
+            document.getElementById('accountDelete').classList.remove('hidden');
+            document.getElementById('accountDelete').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('accountDelete').classList.remove('flex');
+            document.getElementById('accountDelete').classList.add('hidden');
+        }
+    </script>
+    <div id="accountDelete"
+        class=" hidden absolute z-10 center-absolute w-1/3 bg-red-100 border-t-8 border-red-600 rounded-b-lg px-4 py-4 flex-col justify-around shadow-md dark:bg-white text-gray-700 dark:text-gray-700">
+        <div class="flex flex-col justify-center items-center">
+            <img src="{{ asset('images/website/trash_bin.gif') }}" alt="" width="100px">
+            <h2 class="text-lg font-bold mt-2 text-center">Are you sure to delete <span
+                    id="modal-title">{{ auth()->user()->username }}</span> ?</h2>
+            <span class="text-sm font-bold my-4">To confirm, type "{{ auth()->user()->username }}" in the box
+                below</span>
+            <input type="text" name="checkDeleteName" id="checkDeleteName" onblur="checkDeleteName()"
+                class="border-black bg-gray-300 block w-full mt-1 text-sm text-black focus:shadow-outline-gray form-input">
+            <div class="flex justify-between gap-6 mt-2">
+                <a href="" id="deleteAccount"
+                    class="bg-red-600 active:bg-red-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                    type="button">
+                    Delete
+                </a>
+                <button
+                    class="bg-gray-600 active:bg-gray-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                    type="button" onclick="closeModal()">
+                    Cancle
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Desktop sidebar -->
     <aside class="z-20 hidden w-64 overflow-y-auto bg-gray-100 dark:bg-gray-800 md:block flex-shrink-0">
         <div class="py-4 text-gray-500 dark:text-gray-400">
-            <a href="{{ url('/') }}" class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
+            <a href="{{ url('/') }}" class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
+                href="#">
                 Social Network Platform
             </a>
             <ul class="mt-6">
@@ -107,7 +146,7 @@
                                 d="M10.871 1.015a.5.5 0 0 1 .364.606l-.25 1a.5.5 0 1 1-.97-.242l.25-1a.5.5 0 0 1 .606-.364Zm2.983 1.132a.5.5 0 0 1 0 .707l-1 1a.5.5 0 1 1-.707-.707l1-1a.5.5 0 0 1 .707 0Zm-7.57 10.886a2 2 0 0 0 3.63-1.605l-3.63 1.605Zm-.92.406l-.998.442a1.4 1.4 0 0 1-1.555-.29l-.4-.399a1.394 1.394 0 0 1-.293-1.548l3.871-8.808a1.4 1.4 0 0 1 2.269-.427l5.332 5.316a1.395 1.395 0 0 1-.422 2.264l-2.335 1.032a3 3 0 0 1-5.469 2.418ZM14.5 5h-1a.5.5 0 0 0 0 1h1a.5.5 0 1 0 0-1ZM6.905 3.238l-3.872 8.808a.394.394 0 0 0 .083.438l.401.4a.4.4 0 0 0 .444.082l8.802-3.892a.395.395 0 0 0 .12-.64l-5.33-5.318a.4.4 0 0 0-.647.12Z" />
                         </svg>
                         <span class="ml-4">My Channels</span>
-                        @if ($postType == 'my-channels')
+                        @if ($postType == 'my-channels' || $postType == 'channel')
                             <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
                                 aria-hidden="true"></span>
                         @endif
@@ -116,8 +155,8 @@
                 <li class="relative px-6 py-1" id="new_squad.html">
                     <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                         href="{{ route('create-channel') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
                         <span class="ml-4">New Channel</span>
@@ -133,7 +172,7 @@
             <ul>
                 <li class="relative px-6 py-1" id="chatting.html">
                     <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="chatting.html">
+                        href="">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -240,11 +279,24 @@
             </ul>
             <hr class="my-3 dark:border-gray-600" />
             <div class="px-6 my-6">
-                <button
+                <button onclick="accountDelete()"
                     class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
-                    Log Out
+                    Account Delete
                     <span class="ml-2" aria-hidden="true">-</span>
                 </button>
             </div>
         </div>
     </aside>
+    <script>
+        let checkInput = document.getElementById('checkDeleteName');
+        let deleteButton = document.getElementById('deleteAccount');
+        let checkName = @json(auth()->user()->username);
+
+        function checkDeleteName() {
+            if (checkInput.value === checkName) {
+                deleteButton.href = "{{ route('profile.delete', auth()->user()->username, 'delete') }}";
+            } else {
+                deleteButton.href = "";
+            }
+        }
+    </script>

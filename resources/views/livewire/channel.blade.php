@@ -7,7 +7,6 @@
     $followed = App\Models\PageLike::where('user_id', auth()->id())
         ->where('page_id', $channel->id)
         ->exists();
-    // $followers = App\Models\PageLike::where('page_id', $channel->id)->count();
 @endphp
 <div class="container p-6 mx-auto">
     <div class="relative">
@@ -19,12 +18,26 @@
         <div class="flex justify-between items-center p-4">
             <div class="border-4 border-black bg-gray-100 rounded-full overflow-hidden dark:border-white">
                 <img src="{{ asset('images/pages/' . $channel->icon) }}" alt="Profile picture"
-                    class="w-32 h-32 object-cover">
+                    class="w-24 h-24 object-cover">
             </div>
             <div class="text-center">
-                <h2 class="text-lg font-bold">{{ $channel->name }}</h2><br>
-                <span class="font-semibold text-sm text-gray-600 dark:text-gray-400">{{ $channel->members }}
-                    Followers | {{ $posts->count() }} Posts</span><br>
+                <h2 class="text-lg font-bold">{{ $channel->name }}</h2>
+
+                <span class="font-semibold text-sm text-gray-600 dark:text-gray-400">
+                    {{ $channel->members }} @if ($channel->members > 1)
+                        Followers
+                    @else
+                        Follower
+                    @endif |
+                    {{ $posts->count() }}
+                    @if ($posts->count() > 1)
+                        Posts
+                    @else
+                        Post
+                    @endif
+                </span><br />
+                <span
+                    class="font-semibold text-sm text-gray-600 dark:text-gray-400">"__{{ $channel->description }}__"</span>
             </div>
             <div class="flex gap-6">
                 @if ($channel->user_id == auth()->id())

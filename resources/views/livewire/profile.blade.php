@@ -4,24 +4,28 @@
     $username = substr($path, strrpos($path, '/') + 1);
     $user = App\Models\User::where('username', $username)->first();
 
-    // posts where user_id is equal to the user's id and is_page is equal to 0
+    $posts = App\Models\Post::where('user_id', $user->id)
+        ->where('is_page_post', 0)
+        ->get()
+        ->sortByDesc('created_at');
 
-$posts = App\Models\Post::where('user_id', $user->id)
-    ->where('is_page_post', 0)
-    ->get()
-    ->sortByDesc('created_at');
+    $numOfFriends = 0;
+    $numOfFriends += App\Models\Friend::where('user_id', $user->id)
+        ->where('status', 'accepted')
+        ->count();
+    $numOfFriends += App\Models\Friend::where('friend_id', $user->id)
+        ->where('status', 'accepted')
+        ->count();
+    $user->numOfFriends = $numOfFriends;
 
-$numOfFriends = 0;
-$numOfFriends += App\Models\Friend::where('user_id', $user->id)->count();
-$numOfFriends += App\Models\Friend::where('friend_id', $user->id)->count();
-$user->numOfFriends = $numOfFriends;
-
-$friends = App\Models\Friend::where('user_id', $user->id)
-    ->where('status', 'accepted')
-    ->get();
-$get_friends = App\Models\Friend::where('friend_id', $user->id)
-    ->where('status', 'accepted')
+    $friends = App\Models\Friend::where('user_id', $user->id)
+        ->where('status', 'accepted')
         ->get();
+    $get_friends = App\Models\Friend::where('friend_id', $user->id)
+        ->where('status', 'accepted')
+        ->get();
+
+    $numOfComments = App\Models\Comment::where('user_id', $user->id)->count();
 @endphp
 
 <main class="profile-page h-full overflow-y-auto">
@@ -46,7 +50,7 @@ $get_friends = App\Models\Friend::where('friend_id', $user->id)
     <section class="relative py-16 bg-gray-200">
         <div class="container mx-auto px-4">
             <div
-                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64 dark:bg-gray-800 dark:text-gray-200">
+                class="relative flex flex-col min-w-0 break-words bg-teal-100 w-full mb-6 shadow-xl rounded-lg -mt-64 dark:bg-gray-800 dark:text-gray-200">
                 <div class="px-6">
                     <div class="flex flex-wrap justify-center">
                         <div class="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
@@ -74,19 +78,47 @@ $get_friends = App\Models\Friend::where('friend_id', $user->id)
                             </div>
                         </div>
                         <div class="w-full lg:w-4/12 px-4 lg:order-1">
-                            <div class="flex justify-center py-4 lg:pt-4 pt-8">
-                                <h3
-                                    class="text-3xl font-semibold leading-normal mb-2 text-gray-700 mb-2 dark:text-gray-200">
+                            <div class="mt-2 flex flex-col justify-center text-center py-4 lg:pt-4 pt-8">
+                                <h3 class="text-3xl font-semibold leading-normal text-gray-700 mb-2 dark:text-gray-200">
                                     {{ $user->first_name }} {{ $user->last_name }}
                                 </h3>
+                                <div>
+                                    @if ($user->numOfFriends > 0)
+                                        <span class="text-sm"> {{ $user->numOfFriends }}
+                                            @if ($user->numOfFriends > 1)
+                                                friends
+                                            @else
+                                                friend
+                                            @endif
+                                        </span> <span class="font-bold">|</span>
+                                    @endif
+                                    @if ($posts->count() > 0)
+                                        <span class="text-sm"> {{ $posts->count() }}
+                                            @if ($posts->count() > 1)
+                                                posts
+                                            @else
+                                                post
+                                            @endif
+                                        </span> <span class="font-bold">|</span>
+                                    @endif
+                                    @if ($numOfComments > 0)
+                                        <span class="text-sm"> {{ $numOfComments }}
+                                            @if ($numOfComments > 1)
+                                                comments
+                                            @else
+                                                comment
+                                            @endif
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-10 py-10 border-t border-gray-200 text-center">
+                    <div class="mt-10 py-6 border-t border-black dark:border-white text-center">
                         <div class="flex flex-wrap justify-center">
                             <div class="w-full lg:w-9/12 px-4">
                                 @if ($user->description)
-                                    <p class="mb-4 text-lg leading-relaxed text-gray-700 dark:text-gray-200">
+                                    <p class="text-lg font-bold leading-relaxed text-gray-700 dark:text-gray-200">
                                         {{ $user->description }}
                                     </p>
                                 @endif
@@ -107,10 +139,10 @@ $get_friends = App\Models\Friend::where('friend_id', $user->id)
                                 @php
                                     $friend = App\Models\User::find($friend->friend_id);
                                 @endphp
-                                <div class="rounded-lg overflow-hidden max-h-sm">
+                                <div class="rounded-lg overflow-hidden max-h-sm border border-black dark:border-white">
                                     <img class="h-24 min-w-full object-cover"
                                         src="{{ asset('images/profiles/' . $friend->profile) }}" alt="">
-                                    <div class="py-2">
+                                    <div class="py-2 text-center">
                                         <a href="{{ route('profile.show', $friend->username) }}"
                                             class="text-xs font-semibold">{{ $friend->username }}</a>
                                     </div>
@@ -120,10 +152,10 @@ $get_friends = App\Models\Friend::where('friend_id', $user->id)
                                 @php
                                     $friend = App\Models\User::find($friend->user_id);
                                 @endphp
-                                <div class="rounded-lg overflow-hidden max-h-sm">
+                                <div class="rounded-lg overflow-hidden max-h-sm border border-black dark:border-white">
                                     <img class="h-24 min-w-full object-cover"
                                         src="{{ asset('images/profiles/' . $friend->profile) }}" alt="">
-                                    <div class="py-2">
+                                    <div class="py-2 text-center">
                                         <a href="{{ route('profile.show', $friend->username) }}"
                                             class="text-xs font-semibold">{{ $friend->username }}</a>
                                     </div>
@@ -139,7 +171,7 @@ $get_friends = App\Models\Friend::where('friend_id', $user->id)
                             <p>About</p>
                         </div>
                         <div
-                            class="p-6 m-6 bg-gray-100 rounded-lg shadow-md overflow-hidden dark:bg-gray-700 dark:text-gray-200">
+                            class="p-6 m-6 bg-blue-100 rounded-lg shadow-md overflow-hidden dark:bg-gray-700 dark:text-gray-200">
                             @if ($user->school)
                                 <div class="flex mb-2">
                                     <span>
@@ -212,8 +244,9 @@ $get_friends = App\Models\Friend::where('friend_id', $user->id)
                                     </span>
                                     <p class="pl-2 capitalize">{{ $user->relationship }}
                                         @if ($user->relationship != 'single')
+                                            with
                                             <a href="{{ route('profile.show', $user->partner) }}"
-                                                class="lowercase font-bold text-gray-600 dark:text-white">with
+                                                class="lowercase font-bold text-gray-600 dark:text-white">
                                                 {{ $user->partner }}</a>
                                         @endif
                                     </p>

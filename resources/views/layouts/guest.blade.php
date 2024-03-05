@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <div class="flex h-screen dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+    <div class="bg-blue-100" :class="{ 'overflow-hidden': isSideMenuOpen }">
         @yield('content')
     </div>
 </body>

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Models\Notification;
 
 class ProfileEdit extends Component
 {
@@ -18,7 +19,7 @@ class ProfileEdit extends Component
     public function profileEdit(Request $request)
     {
         $user = User::findOrFail(Auth::user()->id);
-
+        $sender = User::where('username', $request->partner)->first();
         DB::beginTransaction();
         try {
             $user->update([
@@ -36,6 +37,21 @@ class ProfileEdit extends Component
                 'address' => $request->address,
                 'website' => $request->website,
             ]);
+
+            if ($request->relationship != 'Single') {
+                if ($request->partner != $user->partner) {
+                    $sender->update([
+                        'relationship' => $request->relationship,
+                        'partner' => $user->username
+                    ]);
+                    Notification::create([
+                        "type" =>  "Relationship Status",
+                        "user_id" => $sender->id,
+                        "message" => auth()->user()->username . " is now in a relationship with " . $request->partner,
+                        "url" => '/profile/' . $request->partner . '/edit'
+                    ]);
+                }
+            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

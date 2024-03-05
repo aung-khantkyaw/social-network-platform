@@ -1,6 +1,7 @@
 {{-- Close your eyes. Count to one. That is how long forever feels. --}}
 @php
     $user = auth()->user();
+    $users = App\Models\User::where('id', '!=', $user->id)->get();
 @endphp
 <div class="flex flex-col items-center">
     <div class="w-3/4 max-w-md bg-gray-100 rounded-lg shadow-xs dark:bg-gray-800 p-6 mt-2">
@@ -148,7 +149,8 @@
                     <div class="relative text-gray-500 focus-within:text-purple-600">
                         <input type="text" name="partner" id="partner" value="{{ $user->partner }}"
                             class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                            placeholder="Your Partner" />
+                            placeholder="Your Partner" onblur="checkuser()" />
+
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none" id="title-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -260,13 +262,37 @@
                     </div>
                 </div>
             </div>
-
-            {{-- <input class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4" type="submit" value="Submit"> --}}
-            <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4" type="submit">Edit</button>
+            <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 submit"
+                type="submit">Edit</button>
         </form>
     </div>
 </div>
 <script>
+    const relationshipSelect = document.getElementById("relationship");
+    const partnerInput = document.getElementById("partner");
+    const submitButton = document.querySelector(".submit");
+
+    relationshipSelect.addEventListener("change", () => {
+        if (relationshipSelect.value === "single") {
+            partnerInput.disabled = true;
+        } else {
+            partnerInput.disabled = false;
+        }
+    });
+
+    function checkuser() {
+        let partner = partnerInput.value;
+        let users = @json($users);
+        let user = users.find(user => user.username === partner);
+        if (!user) {
+            partnerInput.classList.add('border-red-600');
+            submitButton.disabled = true;
+        } else {
+            partnerInput.classList.remove('border-red-600');
+            submitButton.disabled = false;
+        }
+    }
+
     let dropArea = document.querySelector('.drop_area');
     let dropFile = document.querySelector('#dropzone-file');
     let imgView = document.querySelector('.img_view');

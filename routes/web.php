@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/profile/{user:username}', Profile::class)->name('profile.show');
     Route::get('/profile/{user:username}/edit', ProfileEdit::class)->name('profile-edit');
     Route::post('/profile.edit', [ProfileEdit::class, 'profileEdit'])->name('profile.edit');
+    Route::get('/profile/{user:username}/delete', [Profile::class, 'deleteProfile'])->name('profile.delete');
 
     // create post
     Route::get('/create-post', CreatePost::class)->name('create-post');
@@ -99,5 +100,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/terms-and-conditions', function () {
+    return view('terms-and-conditions');
+})->name('terms-and-conditions');
 
 require __DIR__ . '/auth.php';

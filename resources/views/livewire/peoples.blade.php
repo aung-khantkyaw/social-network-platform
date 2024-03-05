@@ -71,7 +71,7 @@
         </button>
     </div>
 
-    <div class="m-4 p-4 rounded-lg bg-blue-100 shadow-md dark:bg-gray-700">
+    <div class="m-4 p-4 rounded-lg bg-gray-100 shadow-md dark:bg-gray-700">
 
         <div class="friends_section ">
             <div class="flex items-center justify-between ">
@@ -98,7 +98,7 @@
                                         alt="">
                                 @endif
                             </div>
-                            <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
+                            <div class="flex-1 bg-blue-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                 <div class="flex flex-1">
                                     <img src="{{ 'images/profiles/' . $friend->profile }}" alt="Avatar"
                                         class="w-12 h-12 rounded-full mr-4">
@@ -151,7 +151,7 @@
                                         alt="">
                                 @endif
                             </div>
-                            <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
+                            <div class="flex-1 bg-blue-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                 <div class="flex flex-1">
                                     <img src="{{ 'images/profiles/' . $friend->profile }}" alt="Avatar"
                                         class="w-12 h-12 rounded-full mr-4">
@@ -222,7 +222,7 @@
                                             alt="">
                                     @endif
                                 </div>
-                                <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
+                                <div class="flex-1 bg-blue-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                     <div class="flex flex-1">
                                         <img src="{{ 'images/profiles/' . $request->profile }}" alt="Avatar"
                                             class="w-12 h-12 rounded-full mr-4">
@@ -309,7 +309,7 @@
                                         alt="">
                                 @endif
                             </div>
-                            <div class="flex-1 bg-gray-100 p-6 flex flex-col justify-between dark:bg-gray-800">
+                            <div class="flex-1 bg-blue-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                 <div class="flex flex-1">
                                     <img src="{{ 'images/profiles/' . $suggestion->profile }}" alt="Avatar"
                                         class="w-12 h-12 rounded-full mr-4">

@@ -21,16 +21,37 @@
 </head>
 
 <body>
-    <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
-        @include('layouts.desktop_sidebar')
-        @include('layouts.mobile_sidebar')
-        <div class="flex flex-col flex-1 w-full">
-            @include('layouts.navigation')
-            <main class="h-full overflow-y-auto">
-                @yield('content')
-            </main>
+    {{-- has auth user or not, if auth user is not redirect to login --}}
+    @if (auth()->check())
+        <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+            @include('layouts.desktop_sidebar')
+            @include('layouts.mobile_sidebar')
+            <div class="flex flex-col flex-1 w-full">
+                @include('layouts.navigation')
+                <main class="h-full overflow-y-auto bg-blue-100 dark:bg-gray-900">
+                    @yield('content')
+                </main>
+            </div>
         </div>
-    </div>
+    @else
+        <div class="bg-blue-100">
+            @yield('content')
+        </div>
+    @endif
+
+    {{-- @if (auth()->user())
+        <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+            @include('layouts.desktop_sidebar')
+            @include('layouts.mobile_sidebar')
+            <div class="flex flex-col flex-1 w-full">
+                @include('layouts.navigation')
+                <main class="h-full overflow-y-auto bg-blue-100 dark:bg-gray-900">
+                    @yield('content')
+                </main>
+            </div>
+        </div>
+    @else --}}
+
 </body>
 
 </html>

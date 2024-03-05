@@ -6,6 +6,7 @@ use App\Models\Notification;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Models\SavedPost;
+use App\Models\Post;
 
 class SavedPostController extends Component
 {
@@ -19,12 +20,14 @@ class SavedPostController extends Component
     {
         DB::beginTransaction();
         try {
-            $save = SavedPost::firstOrCreate(["post_id" => $post_id, "user_id" => auth()->id()]);
+            SavedPost::firstOrCreate(["post_id" => $post_id, "user_id" => auth()->id()]);
+            $post = Post::findOrFail($post_id);
+
             Notification::create([
                 "type" => "Save Post",
-                "user_id" => $save->post->user_id,
+                "user_id" => $post->user_id,
                 "message" => auth()->user()->username . " saved your post",
-                "url" => "/post/" . $save->post->uuid
+                "url" => "/post/" .  $post->uuid
             ]);
             DB::commit();
         } catch (\Throwable $th) {

@@ -38,7 +38,7 @@
 
     <div class="w-3/4 max-w-md bg-gray-100 rounded-lg shadow-xs dark:bg-gray-800 p-6 mt-2 mb-2">
         <div style="background-image: url({{ asset('images/thumbnails/' . $post->thumbnail) }}); background-size: cover; background-position: center; background-repeat: no-repeat;"
-            class="min-h-xs flex items-center justify-center">
+            class="min-h-xs flex items-center justify-center rounded-lg">
             <div class="glass-morphic min-w-xl text-center">
                 <h1 class="text-3xl font-bold text-white">{{ $post->title }}
                 </h1>
@@ -52,7 +52,7 @@
                 </div>
                 <div>
                     <span class="text-sm font-bold">By <a
-                            href="{{ route('profile.show', $post->user->username) }}">{{ '@' . $post->user->username }}</a></span><br>
+                            href="{{ route('profile.show', $post->user->username) }}">{{ $post->user->username }}</a></span><br>
                     <span class="text-sm font-bold">at {{ $post->created_at->diffForHumans() }}</span>
                 </div>
             </div>
@@ -70,7 +70,7 @@
             @endif
         </div>
 
-        <div class="mt-4 text-white">
+        <div class="mt-4 dark:text-white">
             {!! $post->content !!}
         </div>
 
@@ -93,7 +93,7 @@
 
 
         <hr class="mt-4 border-2" />
-        <div class="mt-4">
+        <div class="mt-4 bg-blue-100 dark:bg-gray-700 p-4 rounded-md">
             <h2 class="text-xl font-bold text-gray-700 dark:text-gray-100">Comments</h2>
 
             <div class="mt-4">
@@ -120,7 +120,7 @@
                 @forelse ($comments as $comment)
                     @if ($comment->post_id == $post->id)
                         <div
-                            class="mt-4 p-4 rounded-lg flex flex-col text-gray-700 dark:text-gray-100 dark:bg-gray-900">
+                            class="mt-4 p-4 rounded-lg flex flex-col text-gray-700 dark:text-gray-100 bg-gray-100 dark:bg-gray-900">
 
                             <div class="flex flex-row">
                                 <div>
@@ -135,7 +135,7 @@
 
                                 </div>
                             </div>
-                            <div class="mt-4 p-4 rounded-lg  dark:text-gray-100 dark:bg-gray-800">
+                            <div class="mt-4 p-4 rounded-lg border dark:text-gray-100 dark:bg-gray-800">
                                 <p>{{ $comment->comment }}</p>
                             </div>
                         </div>

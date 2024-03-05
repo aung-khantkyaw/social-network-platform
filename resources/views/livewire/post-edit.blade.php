@@ -56,8 +56,8 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF
                             (MAX. 5MB)</p>
                     </div>
-                    <input id="dropzone-file" type="file" class="hidden" name="thumbnail" required
-                        value="{{ $post->thumbnail }}" />
+                    <input id="dropzone-file" type="file" class="hidden" name="thumbnail"
+                        value="{{ asset('images/thumbnails/' . $post->thumbnail) }}" />
                 </label>
 
                 <label class="w-full text-sm mt-4">
