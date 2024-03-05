@@ -1,40 +1,40 @@
-{{-- If you look to others for fulfillment, you will never truly be fulfilled. --}}
+{{-- Do your work, then step back. --}}
 @php
     $path = parse_url(url()->current())['path'];
     $uuid = substr($path, strrpos($path, '/') + 1);
-    $channel = App\Models\Page::where('uuid', $uuid)->first();
-    $posts = App\Models\Post::where('page_id', $channel->id)
+    $squad = App\Models\Group::where('uuid', $uuid)->first();
+    $posts = App\Models\Post::where('group_id', $squad->id)
         ->get()
         ->sortByDesc('created_at');
-    $followed = App\Models\PageLike::where('user_id', auth()->id())
-        ->where('page_id', $channel->id)
+    $joined = App\Models\GroupMember::where('user_id', auth()->id())
+        ->where('group_id', $squad->id)
         ->exists();
+
 @endphp
 <div class="container p-6 mx-auto">
     <script>
-        function channelDelete() {
-            document.getElementById('channelDelete').classList.remove('hidden');
-            document.getElementById('channelDelete').classList.add('flex');
+        function squadDelete() {
+            document.getElementById('squadDelete').classList.remove('hidden');
+            document.getElementById('squadDelete').classList.add('flex');
         }
 
         function closeModal() {
-            document.getElementById('channelDelete').classList.remove('flex');
-            document.getElementById('channelDelete').classList.add('hidden');
+            document.getElementById('squadDelete').classList.remove('flex');
+            document.getElementById('squadDelete').classList.add('hidden');
         }
     </script>
-    <div id="channelDelete"
+    <div id="squadDelete"
         class=" hidden absolute z-10 center-absolute w-1/3 bg-red-100 border-t-8 border-red-600 rounded-b-lg px-4 py-4 flex-col justify-around shadow-md dark:bg-white text-gray-700 dark:text-gray-700">
         <div class="flex flex-col justify-center items-center">
             <img src="{{ asset('images/website/trash_bin.gif') }}" alt="" width="100px">
             <h2 class="text-lg font-bold mt-2 text-center">Are you sure to delete <span
-                    id="modal-title">{{ $channel->name }}</span> ?</h2>
-            <span class="text-sm font-bold my-4">To confirm, type "{{ $channel->name }}" in the box
+                    id="modal-title">{{ $squad->name }}</span> ?</h2>
+            <span class="text-sm font-bold my-4">To confirm, type "{{ $squad->name }}" in the box
                 below</span>
-            <input type="text" name="checkDeleteChannelName" id="checkDeleteChannelName"
-                onblur="checkDeleteChannelName()"
+            <input type="text" name="checkDeleteSquadName" id="checkDeleteSquadName" onblur="checkDeleteSquadName()"
                 class="border-black bg-gray-300 block w-full mt-1 text-sm text-black focus:shadow-outline-gray form-input">
             <div class="flex justify-between gap-6 mt-2">
-                <a href="" id="deleteChannel"
+                <a href="" id="deleteSquad"
                     class="bg-red-600 active:bg-red-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                     type="button">
                     Delete
@@ -48,24 +48,24 @@
         </div>
     </div>
     <div class="relative">
-        <img src="{{ asset('images/pages/thumbnails/' . $channel->thumbnail) }}" alt="Cover photo"
+        <img src="{{ asset('images/squads/thumbnails/' . $squad->thumbnail) }}" alt="Cover photo"
             class="w-full h-48 rounded-t-lg">
     </div>
     <div class="bg-gray-100 p-4 rounded-lg shadow mt-4 dark:bg-gray-800 dark:text-gray-200">
         <hr class="my-3 dark:border-gray-600" />
         <div class="flex justify-between items-center p-4">
             <div class="border-4 border-black bg-gray-100 rounded-full overflow-hidden dark:border-white">
-                <img src="{{ asset('images/pages/' . $channel->icon) }}" alt="Profile picture"
+                <img src="{{ asset('images/squads/' . $squad->icon) }}" alt="Profile picture"
                     class="w-24 h-24 object-cover">
             </div>
             <div class="text-center">
-                <h2 class="text-lg font-bold">{{ $channel->name }}</h2>
+                <h2 class="text-lg font-bold">{{ $squad->name }}</h2>
 
                 <span class="font-semibold text-sm text-gray-600 dark:text-gray-400">
-                    {{ $channel->members }} @if ($channel->members > 1)
-                        Followers
+                    {{ $squad->members }} @if ($squad->members > 1)
+                        Members
                     @else
-                        Follower
+                        Member
                     @endif |
                     {{ $posts->count() }}
                     @if ($posts->count() > 1)
@@ -75,27 +75,31 @@
                     @endif
                 </span><br />
                 <span
-                    class="font-semibold text-sm text-gray-600 dark:text-gray-400">"__{{ $channel->description }}__"</span>
+                    class="font-semibold text-sm text-gray-600 dark:text-gray-400">"__{{ $squad->description }}__"</span>
             </div>
             <div class="flex gap-6">
-                @if ($channel->user_id == auth()->id())
-                    <a href="{{ route('channel.create-post', $channel->uuid) }}"
+                @if ($squad->user_id == auth()->id())
+                    <a href="{{ route('squad.create-post', $squad->uuid) }}"
                         class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                         New Post
                     </a>
-                    <button onclick="channelDelete()"
+                    <button onclick="squadDelete()"
                         class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
-                        Delete Channel
+                        Delete Squad
                     </button>
-                @elseif($followed)
-                    <a href="{{ route('unfollow-channel', $channel->id) }}"
+                @elseif($joined)
+                    <a href="{{ route('squad.create-post', $squad->uuid) }}"
+                        class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                        New Post
+                    </a>
+                    <a href="{{ route('leave-squad', $squad->id) }}"
                         class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
-                        Unfollow Channel
+                        Leave Squad
                     </a>
                 @else
-                    <a href="{{ route('follow-channel', $channel->id) }}"
+                    <a href="{{ route('join-squad', $squad->id) }}"
                         class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-                        Follow Channel
+                        Join Squad
                     </a>
                 @endif
 
@@ -110,24 +114,27 @@
                 <!-- Card -->
                 @forelse ($posts as $post)
                     @php
+                        $user = App\Models\User::where('id', $post->user_id)->first();
                         $title = $post->title;
                     @endphp
                     <div class="flex flex-col p-4 bg-gray-100 rounded-lg shadow-xs dark:bg-gray-800">
                         <div class="flex items-center justify-between">
                             <div class="flex">
-                                <img src="{{ asset('images/pages/' . $channel->icon) }}" alt="Avatar"
+                                <img src="{{ asset('images/profiles/' . $user->profile) }}" alt="Avatar"
                                     class="w-12 h-12 rounded-full mr-4">
                                 <div>
-                                    <h2 class="text-sm font-medium text-gray-700 dark:text-gray-200">
-                                        {{ $channel->name }}
-                                    </h2>
-                                    <p class="text-xs text-gray-600 dark:text-gray-400"> {{ $channel->members }}
-                                        followers
-                                    </p>
+                                    <a href="{{ route('profile.show', $user->username) }}">
+                                        <h2 class="text-sm font-medium text-gray-700 dark:text-gray-200">
+                                            {{ $user->first_name . ' ' . $user->last_name }}
+                                        </h2>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                                            {{ '@' . $user->username }}
+                                        </p>
+                                    </a>
                                 </div>
                             </div>
                             <div class="relative inline-flex rounded-lg shadow-sm" role="group">
-                                <a href="{{ route('channel.post.show', $post->uuid) }}"
+                                <a href="{{ route('squad.post.show', $post->uuid) }}"
                                     class="px-2 py-1 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
                                     Read More
                                 </a>
@@ -243,15 +250,15 @@
     </section>
 </div>
 <script>
-    let checkInputChannel = document.getElementById('checkDeleteChannelName');
-    let deleteChannelButton = document.getElementById('deleteChannel');
-    let checkChannel = @json($channel->name);
+    let checkInputSquad = document.getElementById('checkDeleteSquadName');
+    let deleteSquadButton = document.getElementById('deleteSquad');
+    let checkSquad = @json($squad->name);
 
-    function checkDeleteChannelName() {
-        if (checkInputChannel.value === checkChannel) {
-            deleteChannelButton.href = "{{ route('delete-channel', $channel->id) }}";
+    function checkDeleteSquadName() {
+        if (checkInputSquad.value === checkSquad) {
+            deleteSquadButton.href = "{{ route('delete-squad', $squad->id) }}";
         } else {
-            deleteChannelButton.href = "";
+            deleteSquadButton.href = "";
         }
     }
 </script>

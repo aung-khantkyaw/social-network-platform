@@ -13,7 +13,7 @@ class Group extends Model
         'uuid',
         'user_id',
         'icon',
-        'thumbnial',
+        'thumbnail',
         'description',
         'name',
         'location',

@@ -6,6 +6,7 @@
 
     $posts = App\Models\Post::where('user_id', $user->id)
         ->where('is_page_post', 0)
+        ->where('is_group_post', 0)
         ->get()
         ->sortByDesc('created_at');
 

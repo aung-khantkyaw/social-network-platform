@@ -30,7 +30,7 @@
                     </svg>
                 </span>
                 Not Read @if (count($notReadNotifications) > 0)
-                    {{ '-' . count($notReadNotifications) }}
+                    {{ '( ' . count($notReadNotifications) . ' )' }}
                 @endif
             </button>
             <button

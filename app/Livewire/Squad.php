@@ -2,43 +2,43 @@
 
 namespace App\Livewire;
 
-use App\Models\Comment;
-use App\Models\Notification;
 use Livewire\Component;
-use App\Models\Page;
-use App\Models\PageLike;
+use App\Models\Group;
+use App\Models\GroupMember;
+use App\Models\Notification;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
+use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Share;
 
-class Channel extends Component
+class Squad extends Component
 {
     public function render()
     {
-        return view('livewire.channel')->extends('layouts.app');
+        return view('livewire.squad')->extends('layouts.app');;
     }
 
-    public function followChannel($id)
+    public function joinSquad($id)
     {
-        $page = Page::findOrFail($id);
+        $group = Group::findOrFail($id);
         DB::beginTransaction();
         try {
-            PageLike::create([
-                'page_id' => $id,
+            GroupMember::create([
+                'group_id' => $id,
                 'user_id' => auth()->id()
             ]);
-            $page->update([
-                'members' => $page->members + 1
+            $group->update([
+                'members' => $group->members + 1
             ]);
             Notification::create([
-                "type" => "Follow Channel",
-                "user_id" => $page->user_id,
-                "message" => auth()->user()->username . " followed your channel",
-                "url" => "/channel/" . $page->uuid
+                "type" => "Joined Channel",
+                "user_id" => $group->user_id,
+                "message" => auth()->user()->username . " joined your squad",
+                "url" => "/squad/" . $group->uuid
             ]);
             DB::commit();
-            session()->flash('success', 'You have successfully followed the channel');
+            session()->flash('success', 'You have successfully joined the squad');
         } catch (\Throwable $th) {
             DB::rollBack();
             session()->flash('error', 'Something went wrong');
@@ -47,17 +47,23 @@ class Channel extends Component
         return redirect()->back();
     }
 
-    public function unfollowChannel($id)
+    public function leaveSquad($id)
     {
-        $page = Page::findOrFail($id);
+        $group = Group::findOrFail($id);
         DB::beginTransaction();
         try {
-            PageLike::where('page_id', $id)->where('user_id', auth()->id())->delete();
-            $page->update([
-                'members' => $page->members - 1
+            GroupMember::where('group_id', $id)->where('user_id', auth()->id())->delete();
+            $group->update([
+                'members' => $group->members - 1
+            ]);
+            Notification::create([
+                "type" => "Left Channel",
+                "user_id" => $group->user_id,
+                "message" => auth()->user()->username . " left your squad",
+                "url" => "/squad/" . $group->uuid
             ]);
             DB::commit();
-            session()->flash('success', 'You have successfully unfollowed the channel');
+            session()->flash('success', 'You have successfully left the squad');
         } catch (\Throwable $th) {
             DB::rollBack();
             session()->flash('error', 'Something went wrong');
@@ -66,12 +72,12 @@ class Channel extends Component
         return redirect()->back();
     }
 
-    public function deleteChannel($id)
+    public function deleteSquad($id)
     {
 
-        $page = Page::findOrFail($id);
-        $posts = Post::where('page_id', $id)->get();
-        $followers = PageLike::where('page_id', $id)->get();
+        $squad = Group::findOrFail($id);
+        $posts = Post::where('group_id', $id)->get();
+        $members = GroupMember::where('group_id', $id)->get();
         DB::beginTransaction();
         try {
             foreach ($posts as $post) {
@@ -89,17 +95,17 @@ class Channel extends Component
                 }
                 $post->delete();
             }
-            foreach ($followers as $follower) {
-                $follower->delete();
+            foreach ($members as $member) {
+                $member->delete();
             }
-            $page->delete();
+            $squad->delete();
             DB::commit();
-            session()->flash('success', 'You have successfully deleted the channel');
+            session()->flash('success', 'You have successfully deleted the squad');
         } catch (\Throwable $th) {
             DB::rollBack();
             session()->flash('error', 'Something went wrong');
             throw $th;
         }
-        return redirect()->to('/my-channels');
+        return redirect()->to('/my-squads');
     }
 }

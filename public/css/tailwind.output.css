@@ -490,8 +490,8 @@ video {
     width: 1em;
     color: #4299e1;
     background-color: transparent;
-    border-color: #e2e8f0;
-    border-width: 1px;
+    border-color: #000000;
+    border-width: 2px;
 }
 .form-radio:checked {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");

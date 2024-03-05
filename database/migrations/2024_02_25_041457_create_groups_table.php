@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('icon');
-            $table->string('thumbnial');
+            $table->string('thumbnail');
             $table->text('description')->nullable();
             $table->string('name');
             $table->string('location')->nullable();

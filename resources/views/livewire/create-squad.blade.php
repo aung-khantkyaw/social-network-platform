@@ -1,8 +1,8 @@
-{{-- The whole world belongs to you. --}}
+{{-- A good traveler has no fixed plans and is not intent upon arriving. --}}
 <div class="flex flex-col items-center">
     <div class="w-3/4 max-w-md bg-gray-100 rounded-lg shadow-xs dark:bg-gray-800 p-6 mt-2">
-        <h2 class="mb-2 text-center text-2xl font-bold text-gray-700 dark:text-gray-200">Create Your Own Channel</h2>
-        <form class="flex flex-col" method="post" action="{{ route('create-channel') }}" enctype="multipart/form-data">
+        <h2 class="mb-2 text-center text-2xl font-bold text-gray-700 dark:text-gray-200">Create Your Own Squad</h2>
+        <form class="flex flex-col" method="post" action="{{ route('create-squad') }}" enctype="multipart/form-data">
             @csrf
             <div class="flex items-center justify-between w-full mb-4 gap-6">
                 <label for="dropzone-file"
@@ -51,11 +51,12 @@
                     <div class="relative text-gray-500 focus-within:text-purple-600">
                         <input type="text" name="name" id="name"
                             class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                            placeholder="Channel Name" />
+                            placeholder="Squad Name" />
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none" id="title-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="w-6 h-6">
-                                <path fill="currentColor"
-                                    d="M10.871 1.015a.5.5 0 0 1 .364.606l-.25 1a.5.5 0 1 1-.97-.242l.25-1a.5.5 0 0 1 .606-.364Zm2.983 1.132a.5.5 0 0 1 0 .707l-1 1a.5.5 0 1 1-.707-.707l1-1a.5.5 0 0 1 .707 0Zm-7.57 10.886a2 2 0 0 0 3.63-1.605l-3.63 1.605Zm-.92.406l-.998.442a1.4 1.4 0 0 1-1.555-.29l-.4-.399a1.394 1.394 0 0 1-.293-1.548l3.871-8.808a1.4 1.4 0 0 1 2.269-.427l5.332 5.316a1.395 1.395 0 0 1-.422 2.264l-2.335 1.032a3 3 0 0 1-5.469 2.418ZM14.5 5h-1a.5.5 0 0 0 0 1h1a.5.5 0 1 0 0-1ZM6.905 3.238l-3.872 8.808a.394.394 0 0 0 .083.438l.401.4a.4.4 0 0 0 .444.082l8.802-3.892a.395.395 0 0 0 .12-.64l-5.33-5.318a.4.4 0 0 0-.647.12Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                             </svg>
                         </div>
                     </div>
@@ -68,7 +69,7 @@
                     <div class="relative text-gray-500 focus-within:text-purple-600">
                         <input type="text" name="type" id="type"
                             class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                            placeholder="Channel Type" />
+                            placeholder="Squad Type" />
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none" id="title-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -88,7 +89,7 @@
                     <div class="relative text-gray-500 focus-within:text-purple-600">
                         <input type="text" name="location" id="location"
                             class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                            placeholder="Channel Location" />
+                            placeholder="Squad Location" />
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none" id="title-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -109,7 +110,7 @@
                     <div class="relative text-gray-500 focus-within:text-purple-600">
                         <input type="text" name="description" id="description"
                             class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                            placeholder="Channel Description" />
+                            placeholder="Squad Description" />
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none" id="title-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -125,7 +126,7 @@
                 @enderror
             </div>
             <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4" type="submit">Create
-                Channel</button>
+                Squad</button>
         </form>
     </div>
 </div>

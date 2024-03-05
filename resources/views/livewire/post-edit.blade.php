@@ -10,35 +10,12 @@
 <div class="flex flex-col items-center">
 
     <div class="w-3/4 max-w-md bg-gray-100 rounded-lg shadow-xs dark:bg-gray-800 p-6 mt-2">
-
-        @if (session()->has('message'))
-            <script>
-                setTimeout(function() {
-                    document.querySelector('.alert').remove();
-                }, 5000);
-            </script>
-            <div
-                class="alert absolute z-10 top-0 right-0 w-64 bg-gray-100 rounded-b-lg border-t-8 border-green-600 px-4 py-4 flex flex-col justify-around shadow-md dark:bg-white text-gray-700 dark:text-gray-700">
-                <div class="flex justify-between items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    {{ session('message') }}
-                </div>
-            </div>
-            @php
-                session()->forget('message');
-            @endphp
-        @endif
         @foreach ($errors->all() as $error)
             <div class="text-red-600" role="alert">
                 {{ $error }}
             </div>
         @endforeach
-        <form class="flex flex-col" method="POST" action="{{ route('post.edit', $uuid) }}"
-            enctype="multipart/form-data">
+        <form class="flex flex-col" method="POST" action="{{ route('post.edit', $uuid) }}" enctype="multipart/form-data">
             @csrf
 
             <input type="text" name="post_id" id="" hidden value="{{ $post->id }}">

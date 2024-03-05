@@ -17,6 +17,13 @@ use App\Livewire\CreateChannelPost;
 use App\Livewire\ShowChannelPost;
 use App\Livewire\SavedPostController;
 use App\Livewire\PostEdit;
+use App\Livewire\CreateSquadPost;
+use App\Livewire\ShowSquadPost;
+use App\Livewire\Squad;
+use App\Livewire\Squads;
+use App\Livewire\CreateSquad;
+use App\Livewire\MySquad;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -51,19 +58,10 @@ Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     // edit post
     Route::get('/post/edit/{post:uuid}', PostEdit::class)->name('post.edit');
     Route::post('/post/edit/{post:uuid}', [ShowPost::class, 'editPost'])->name('post.edit');
-
     Route::get('/save-post/{post:id}', [SavedPostController::class, 'savePost'])->name('save-post');
     Route::get('/unsave-post/{post:id}', [SavedPostController::class, 'unsavePost'])->name('unsave-post');
     Route::get('/save-posts', SavedPostController::class)->name('save-posts');
     Route::get('/share-post/{post:id}', [Home::class, 'sharePost'])->name('share-post');
-
-
-    // channel post create
-    Route::get('/channel/createPost/{page:uuid}', CreateChannelPost::class)->name('channel.create-post');
-    Route::post('/channel/createPost/{page:uuid}', [CreateChannelPost::class, 'createPost'])->name('channel.createpost');
-
-    // channel post
-    Route::get('/channel/post/{post:uuid}', ShowChannelPost::class)->name('channel.post.show');
 
     // friends
     Route::get('/friends', Peoples::class)->name('friends');
@@ -73,6 +71,19 @@ Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/accept-friend/{user:id}', [Peoples::class, 'acceptFriend'])->name('accept-friend');
     Route::get('/reject-friend/{user:username}', [Peoples::class, 'rejectFriend'])->name('reject-friend');
 
+
+    // channel post create
+    Route::get('/channel/createPost/{page:uuid}', CreateChannelPost::class)->name('channel.create-post');
+    Route::post('/channel/createPost/{page:uuid}', [CreateChannelPost::class, 'createPost'])->name('channel.createpost');
+    // squad post create
+    Route::get('/squad/createPost/{page:uuid}', CreateSquadPost::class)->name('squad.create-post');
+    Route::post('/squad/createPost/{page:uuid}', [CreateSquadPost::class, 'createPost'])->name('squad.createpost');
+
+    // channel post
+    Route::get('/channel/post/{post:uuid}', ShowChannelPost::class)->name('channel.post.show');
+    // squad post
+    Route::get('/squad/post/{post:uuid}', ShowSquadPost::class)->name('squad.post.show');
+
     // channel
     Route::get('/create-channel', CreateChannel::class)->name('create-channel');
     Route::post('/create-channel', [CreateChannel::class, 'createChannel'])->name('create-channel');
@@ -81,6 +92,17 @@ Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/channel/{page:uuid}', Channel::class)->name('channel.show');
     Route::get('/follow-channel/{page:id}', [Channel::class, 'followChannel'])->name('follow-channel');
     Route::get('/unfollow-channel/{page:id}', [Channel::class, 'unfollowChannel'])->name('unfollow-channel');
+    Route::get('/delete-channel/{page:id}', [Channel::class, 'deleteChannel'])->name('delete-channel');
+
+    // squad
+    Route::get('/create-squad', CreateSquad::class)->name('create-squad');
+    Route::post('/create-squad', [CreateSquad::class, 'createSquad'])->name('create-squad');
+    Route::get('/squads', Squads::class)->name('squads');
+    Route::get('/my-squads', MySquad::class)->name('my-squads');
+    Route::get('/squad/{group:uuid}', Squad::class)->name('squad.show');
+    Route::get('/join-squad/{group:id}', [Squad::class, 'joinSquad'])->name('join-squad');
+    Route::get('/leave-squad/{group:id}', [Squad::class, 'leaveSquad'])->name('leave-squad');
+    Route::get('/delete-squad/{group:id}', [Squad::class, 'deleteSquad'])->name('delete-squad');
 
     // notification
     Route::get('/notification', Notification::class)->name('notification');

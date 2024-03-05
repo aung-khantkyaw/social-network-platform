@@ -2,28 +2,21 @@
 
 namespace App\Livewire;
 
-use Illuminate\Http\Request;
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\DB;
-use App\Models\Page;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use App\Models\Group;
 
-class CreateChannel extends Component
+
+class CreateSquad extends Component
 {
-    use WithFileUploads;
-    public $name;
-    public $description;
-    public $type;
-    public $icon;
-    public $thumbnail;
-    public $location;
     public function render()
     {
-        return view('livewire.create-channel')->extends('layouts.app');
+        return view('livewire.create-squad')->extends('layouts.app');;
     }
 
-    public function createChannel(Request $request)
+    public function createSquad(Request $request)
     {
         $request->validate([
             'name' => ['required', 'min:3', 'max:255'],
@@ -39,14 +32,14 @@ class CreateChannel extends Component
         DB::beginTransaction();
         try {
             $icon = time() . '.' . $request->icon->extension();
-            $path = public_path('images/pages');
+            $path = public_path('images/squads');
             $request->icon->move($path, $icon);
 
             $thumbnail = time() . '.' . $request->thumbnail->extension();
-            $path = public_path('images/pages/thumbnails');
+            $path = public_path('images/squads/thumbnails');
             $request->thumbnail->move($path, $thumbnail);
 
-            Page::create([
+            Group::create([
                 'uuid' => Str::uuid(),
                 'user_id' => auth()->id(),
                 'icon' => $icon,
@@ -56,13 +49,13 @@ class CreateChannel extends Component
                 'location' => $request->location,
                 'type' => $request->type,
             ]);
-            session()->flash('success', 'Channel created successfully.');
+            session()->flash('success', 'Squad created successfully.');
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error', 'Something went wrong');
             throw $e;
         }
-        return redirect()->route('my-channels');
+        return redirect()->route('my-squads');
     }
 }

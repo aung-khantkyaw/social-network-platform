@@ -1,31 +1,32 @@
-{{-- The best athlete wants his opponent at his best. --}}
+{{-- The Master doesn't talk, he acts. --}}
 @php
-    $ownChannels = \App\Models\Page::all()->where('user_id', auth()->id());
-    // $followChannels = \App\Models\PageLike::all()->where('user_id', auth()->id());
-    $followChannels = \App\Models\Page::join('page_likes', 'pages.id', '=', 'page_likes.page_id')
-        ->where('page_likes.user_id', auth()->id())
+    $ownSquads = \App\Models\Group::all()->where('user_id', auth()->id());
+    $joinSquads = \App\Models\Group::join('group_members', 'groups.id', '=', 'group_members.group_id')
+        ->where('group_members.user_id', auth()->id())
         ->get();
-    $followers_count = \App\Models\Follower::all()->count();
+    $Members_count = 0;
 @endphp
 <div class="container px-6 mx-auto grid">
     <div class="my-4 flex justify-evenly">
         <button
             class="follow flex items-center justify-between w-64 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-            Followed Channels
+            Joined Squads
             <span class="ml-2" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="w-6 h-6">
-                    <path fill="currentColor"
-                        d="M10.871 1.015a.5.5 0 0 1 .364.606l-.25 1a.5.5 0 1 1-.97-.242l.25-1a.5.5 0 0 1 .606-.364Zm2.983 1.132a.5.5 0 0 1 0 .707l-1 1a.5.5 0 1 1-.707-.707l1-1a.5.5 0 0 1 .707 0Zm-7.57 10.886a2 2 0 0 0 3.63-1.605l-3.63 1.605Zm-.92.406l-.998.442a1.4 1.4 0 0 1-1.555-.29l-.4-.399a1.394 1.394 0 0 1-.293-1.548l3.871-8.808a1.4 1.4 0 0 1 2.269-.427l5.332 5.316a1.395 1.395 0 0 1-.422 2.264l-2.335 1.032a3 3 0 0 1-5.469 2.418ZM14.5 5h-1a.5.5 0 0 0 0 1h1a.5.5 0 1 0 0-1ZM6.905 3.238l-3.872 8.808a.394.394 0 0 0 .083.438l.401.4a.4.4 0 0 0 .444.082l8.802-3.892a.395.395 0 0 0 .12-.64l-5.33-5.318a.4.4 0 0 0-.647.12Z" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                 </svg>
             </span>
         </button>
         <button
             class="own flex items-center justify-between w-64 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-            My Own Channels
+            My Own Squads
             <span class="ml-2" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="w-6 h-6">
-                    <path fill="currentColor"
-                        d="M10.871 1.015a.5.5 0 0 1 .364.606l-.25 1a.5.5 0 1 1-.97-.242l.25-1a.5.5 0 0 1 .606-.364Zm2.983 1.132a.5.5 0 0 1 0 .707l-1 1a.5.5 0 1 1-.707-.707l1-1a.5.5 0 0 1 .707 0Zm-7.57 10.886a2 2 0 0 0 3.63-1.605l-3.63 1.605Zm-.92.406l-.998.442a1.4 1.4 0 0 1-1.555-.29l-.4-.399a1.394 1.394 0 0 1-.293-1.548l3.871-8.808a1.4 1.4 0 0 1 2.269-.427l5.332 5.316a1.395 1.395 0 0 1-.422 2.264l-2.335 1.032a3 3 0 0 1-5.469 2.418ZM14.5 5h-1a.5.5 0 0 0 0 1h1a.5.5 0 1 0 0-1ZM6.905 3.238l-3.872 8.808a.394.394 0 0 0 .083.438l.401.4a.4.4 0 0 0 .444.082l8.802-3.892a.395.395 0 0 0 .12-.64l-5.33-5.318a.4.4 0 0 0-.647.12Z" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                 </svg>
             </span>
         </button>
@@ -33,16 +34,16 @@
 
     <section class="follow_section">
         <div class="mt-4 p-4 rounded-lg bg-gray-100  shadow-md dark:bg-gray-700">
-            @if ($followChannels->count() > 0)
-                <div class="grid gap-6 my-8 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-                    @foreach ($followChannels as $channel)
+            @if (count($joinSquads) > 0)
+                <div class="grid gap-6 my-8 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"d>
+                    @foreach ($joinSquads as $squad)
                         <div class="flex flex-col p-4 bg-blue-100 rounded-lg shadow-xs dark:bg-gray-800">
                             <div class="flex flex-col rounded-lg shadow-lg">
 
                                 <div class="flex-shrink-0">
-                                    @if ($channel->thumbnail)
+                                    @if ($squad->thumbnail)
                                         <img class="w-full h-32 rounded-lg"
-                                            src="{{ 'images/pages/thumbnails/' . $channel->thumbnail }}" alt="">
+                                            src="{{ 'images/squads/thumbnails/' . $squad->thumbnail }}" alt="">
                                     @else
                                         <img class="w-full h-32 rounded-lg" src="https://picsum.photos/200/300"
                                             alt="">
@@ -50,23 +51,23 @@
                                 </div>
                                 <div class="flex-1 bg-blue-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                     <div class="flex flex-1">
-                                        <img src="{{ 'images/pages/' . $channel->icon }}" alt="Avatar"
+                                        <img src="{{ 'images/squads/' . $squad->icon }}" alt="Avatar"
                                             class="w-12 h-12 rounded-full mr-4">
                                         <div>
                                             <h2 class="text-sm font-bold text-gray-700 dark:text-gray-200">
-                                                {{ $channel->name }}
+                                                {{ $squad->name }}
                                             </h2>
-                                            @if ($channel->members > 0)
+                                            @if ($squad->members > 0)
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                    {{ $channel->members }} Followers
+                                                    {{ $squad->members }} Members
                                                 </p>
                                             @endif
                                         </div>
                                     </div>
                                     <div class="mt-6 flex justify-between gap-6">
-                                        <a href="{{ route('channel.show', $channel->uuid) }}"
+                                        <a href="{{ route('squad.show', $squad->uuid) }}"
                                             class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-                                            View Channel
+                                            View Squad
                                         </a>
                                     </div>
                                 </div>
@@ -78,8 +79,8 @@
                 <div class="flex flex-col items-center justify-center h-144">
                     <img src="{{ asset('images/website/zoom.gif') }}" alt="" width="150px">
                     <div class="text-center mt-6">
-                        <h1 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">No Channels Found!</h1>
-                        <p class="text-gray-500 dark:text-gray-300 mt-2">There is no channel that you followed. Please
+                        <h1 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">No Squads Found!</h1>
+                        <p class="text-gray-500 dark:text-gray-300 mt-2">There is no squad that you joined. Please
                             check back later.</p>
                     </div>
                 </div>
@@ -88,16 +89,16 @@
     </section>
     <section class="hidden own_section">
         <div class="mt-4 p-4 rounded-lg bg-gray-100 shadow-md dark:bg-gray-700">
-            @if ($ownChannels->count() > 0)
+            @if ($ownSquads->count() > 0)
                 <div class="grid gap-6 my-8 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-                    @foreach ($ownChannels as $channel)
+                    @foreach ($ownSquads as $squad)
                         <div class="flex flex-col p-4 bg-blue-100 rounded-lg shadow-xs dark:bg-gray-800">
                             <div class="flex flex-col rounded-lg shadow-lg">
 
                                 <div class="flex-shrink-0">
-                                    @if ($channel->thumbnail)
+                                    @if ($squad->thumbnail)
                                         <img class="w-full h-32 rounded-lg"
-                                            src="{{ 'images/pages/thumbnails/' . $channel->thumbnail }}" alt="">
+                                            src="{{ 'images/squads/thumbnails/' . $squad->thumbnail }}" alt="">
                                     @else
                                         <img class="w-full h-32 rounded-lg" src="https://picsum.photos/200/300"
                                             alt="">
@@ -105,23 +106,23 @@
                                 </div>
                                 <div class="flex-1 bg-blue-100 p-6 flex flex-col justify-between dark:bg-gray-800">
                                     <div class="flex flex-1">
-                                        <img src="{{ 'images/pages/' . $channel->icon }}" alt="Avatar"
+                                        <img src="{{ 'images/squads/' . $squad->icon }}" alt="Avatar"
                                             class="w-12 h-12 rounded-full mr-4">
                                         <div>
                                             <h2 class="text-sm font-bold text-gray-700 dark:text-gray-200">
-                                                {{ $channel->name }}
+                                                {{ $squad->name }}
                                             </h2>
-                                            @if ($channel->members > 0)
+                                            @if ($squad->members > 0)
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                    {{ $channel->members }} Followers
+                                                    {{ $squad->members }} Members
                                                 </p>
                                             @endif
                                         </div>
                                     </div>
                                     <div class="mt-6 flex justify-between gap-6">
-                                        <a href="{{ route('channel.show', $channel->uuid) }}"
+                                        <a href="{{ route('squad.show', $squad->uuid) }}"
                                             class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
-                                            View Channel
+                                            View Squad
                                         </a>
                                     </div>
                                 </div>
@@ -133,8 +134,8 @@
                 <div class="flex flex-col items-center justify-center h-144">
                     <img src="{{ asset('images/website/zoom.gif') }}" alt="" width="150px">
                     <div class="text-center mt-6">
-                        <h1 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">No Channels Found!</h1>
-                        <p class="text-gray-500 dark:text-gray-300 mt-2">There is no channel that you created. Please
+                        <h1 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">No Squads Found!</h1>
+                        <p class="text-gray-500 dark:text-gray-300 mt-2">There is no squad that you created. Please
                             check back later.</p>
                     </div>
                 </div>

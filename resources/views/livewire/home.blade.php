@@ -4,6 +4,7 @@
     foreach ($saved_posts as $saved_post) {
         $get_saved_posts_id[] = $saved_post->post_id;
     }
+    $posts = App\Models\Post::where('is_group_post', 0)->latest()->get();
 @endphp
 <div class="container px-6 mx-auto grid">
     @if ($posts->count() > 0)
