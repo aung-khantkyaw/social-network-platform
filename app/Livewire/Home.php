@@ -70,8 +70,10 @@ class Home extends Component
                 "url" => "/post/" . $post->uuid
             ]);
             DB::commit();
+            session()->flash('success', 'You have successfully shared the post');
         } catch (\Throwable $th) {
             DB::rollBack();
+            session()->flash('error', 'Something went wrong');
             throw $th;
         }
         return redirect()->back();

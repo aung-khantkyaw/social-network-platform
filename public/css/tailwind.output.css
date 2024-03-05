@@ -594,10 +594,20 @@ video {
     background-color: #fde8e8;
     background-color: rgba(253, 232, 232, var(--bg-opacity));
 }
+.bg-red-500 {
+    --bg-opacity: 1;
+    background-color: #e02424;
+    background-color: rgba(224, 36, 36, var(--bg-opacity));
+}
 .bg-red-600 {
     --bg-opacity: 1;
     background-color: #e02424;
     background-color: rgba(224, 36, 36, var(--bg-opacity));
+}
+.bg-red-800 {
+    --bg-opacity: 1;
+    background-color: #c81e1e;
+    background-color: rgba(200, 30, 30, var(--bg-opacity));
 }
 .bg-orange-100 {
     --bg-opacity: 1;
@@ -609,6 +619,17 @@ video {
     background-color: #def7ec;
     background-color: rgba(222, 247, 236, var(--bg-opacity));
 }
+.bg-green-500 {
+    --bg-opacity: 1;
+    background-color: #0e9f6e;
+    background-color: rgba(14, 159, 110, var(--bg-opacity));
+}
+.bg-green-800 {
+    --bg-opacity: 1;
+    background-color: #046c4e;
+    background-color: rgba(4, 108, 78, var(--bg-opacity));
+}
+
 .bg-teal-100 {
     --bg-opacity: 1;
     background-color: #d5f5f6;
@@ -623,6 +644,11 @@ video {
     --bg-opacity: 1;
     background-color: #047481;
     background-color: rgba(4, 116, 129, var(--bg-opacity));
+}
+.bg-teal-800 {
+    --bg-opacity: 1;
+    background-color: #035c66;
+    background-color: rgba(3, 92, 102, var(--bg-opacity));
 }
 .bg-blue-100 {
     --bg-opacity: 1;
@@ -1558,6 +1584,12 @@ video {
 .top-auto {
     top: auto;
 }
+
+.top-right-5 {
+    top: 1.25rem;
+    right: 1.25rem;
+}
+
 .top-0 {
     top: 0;
 }
@@ -1640,6 +1672,11 @@ video {
     --text-opacity: 1;
     color: #1a1c23;
     color: rgba(26, 28, 35, var(--text-opacity));
+}
+.text-red-100 {
+    --text-opacity: 1;
+    color: #f9acaa;
+    color: rgba(249, 172, 170, var(--text-opacity));
 }
 .text-red-600 {
     --text-opacity: 1;
@@ -2138,6 +2175,9 @@ video {
     }
 }
 @media (min-width: 1024px) {
+    .lg\:inline-flex {
+        display: inline-flex;
+    }
     .lg\:flex-row {
         flex-direction: row;
     }
@@ -2152,6 +2192,9 @@ video {
     }
     .lg\:grid-cols-3 {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .lg\:rounded-full {
+        border-radius: 9999px;
     }
     .lg\:w-40 {
         width: 40%;

@@ -42,8 +42,10 @@ class ShowPost extends Component
                 "url" => "/post/" . $post->uuid
             ]);
             DB::commit();
+            session()->flash('success', 'You have successfully commented on the post');
         } catch (\Throwable $th) {
             DB::rollBack();
+            session()->flash('error', 'Something went wrong');
             throw $th;
         }
         unset($this->comment);
@@ -62,10 +64,11 @@ class ShowPost extends Component
                 'content' => $request->content,
             ]);
             DB::commit();
+            session()->flash('success', 'Post updated successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            throw $e;
             session()->flash('error', 'Something went wrong');
+            throw $e;
         }
 
         if ($request->hasFile('thumbnail')) {
@@ -83,6 +86,7 @@ class ShowPost extends Component
         // search post by uuid
         $post = Post::where('uuid', $post_id)->first();
         $post->delete();
+        session()->flash('success', 'Post deleted successfully');
         return redirect()->route('profile.show', Auth::user()->username);
     }
 }

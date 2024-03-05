@@ -66,8 +66,10 @@ class CreatePost extends Component
                 ]);
             }
             DB::commit();
+            session()->flash('success', 'Post created successfully.');
         } catch (\Exception $e) {
             DB::rollback();
+            session()->flash('error', 'Something went wrong');
             throw $e;
         }
 

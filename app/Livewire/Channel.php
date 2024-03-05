@@ -34,8 +34,10 @@ class Channel extends Component
                 "url" => "/channel/" . $page->uuid
             ]);
             DB::commit();
+            session()->flash('success', 'You have successfully followed the channel');
         } catch (\Throwable $th) {
             DB::rollBack();
+            session()->flash('error', 'Something went wrong');
             throw $th;
         }
         return redirect()->back();
@@ -50,10 +52,11 @@ class Channel extends Component
             $page->update([
                 'members' => $page->members - 1
             ]);
-            // Notification::where('user_id', $page->user_id)->where('type', 'follow')->where('message', auth()->user()->name . ' followed your channel')->delete();
             DB::commit();
+            session()->flash('success', 'You have successfully unfollowed the channel');
         } catch (\Throwable $th) {
             DB::rollBack();
+            session()->flash('error', 'Something went wrong');
             throw $th;
         }
         return redirect()->back();

@@ -56,10 +56,11 @@ class CreateChannel extends Component
                 'location' => $request->location,
                 'type' => $request->type,
             ]);
-            session()->flash('message', 'Channel created successfully.');
+            session()->flash('success', 'Channel created successfully.');
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
+            session()->flash('error', 'Something went wrong');
             throw $e;
         }
         return redirect()->route('channels');

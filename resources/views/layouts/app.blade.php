@@ -21,37 +21,79 @@
 </head>
 
 <body>
-    {{-- has auth user or not, if auth user is not redirect to login --}}
-    @if (auth()->check())
-        <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
-            @include('layouts.desktop_sidebar')
-            @include('layouts.mobile_sidebar')
-            <div class="flex flex-col flex-1 w-full">
-                @include('layouts.navigation')
-                <main class="h-full overflow-y-auto bg-blue-100 dark:bg-gray-900">
-                    @yield('content')
-                </main>
-            </div>
-        </div>
-    @else
-        <div class="bg-blue-100">
-            @yield('content')
-        </div>
-    @endif
+    <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+        @include('layouts.desktop_sidebar')
+        @include('layouts.mobile_sidebar')
+        <div class="flex flex-col flex-1 w-full">
+            @include('layouts.navigation')
+            <main class="h-full overflow-y-auto bg-blue-100 dark:bg-gray-900">
+                @if (session()->has('success'))
+                    <script>
+                        setTimeout(function() {
+                            document.querySelector('.alert').remove();
+                        }, 5000);
+                    </script>
+                    <div role="alert"
+                        class="alert w-auto absolute z-10 top-right-5 mb-2 p-2 bg-green-800 rounded-full items-center text-green-100 leading-none lg:rounded-full flex lg:inline-flex">
+                        <span
+                            class="flex rounded-full bg-green-500 uppercase px-2 py-1 text-xs font-bold mr-3">SUCCESS</span>
+                        <span class="font-semibold mr-2 text-left flex-auto">{{ session('success') }}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                    {{-- <div
+                        class="alert absolute z-10 top-0 right-0 w-64 bg-gray-100 rounded-b-lg border-t-8 border-green-600 px-4 py-4 flex flex-col justify-around shadow-md dark:bg-white text-gray-700 dark:text-gray-700">
+                        <div class="flex justify-between items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            {{ session('success') }}
+                        </div>
+                    </div> --}}
+                    @php
+                        session()->forget('success');
+                    @endphp
+                @endif
 
-    {{-- @if (auth()->user())
-        <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
-            @include('layouts.desktop_sidebar')
-            @include('layouts.mobile_sidebar')
-            <div class="flex flex-col flex-1 w-full">
-                @include('layouts.navigation')
-                <main class="h-full overflow-y-auto bg-blue-100 dark:bg-gray-900">
-                    @yield('content')
-                </main>
-            </div>
+                @if (session()->has('error'))
+                    <script>
+                        setTimeout(function() {
+                            document.querySelector('.alert').remove();
+                        }, 5000);
+                    </script>
+                    <div role="alert"
+                        class="alert w-auto absolute z-10 top-right-5 mb-2 p-2 bg-red-800 rounded-full items-center text-red-100 leading-none lg:rounded-full flex lg:inline-flex">
+                        <span
+                            class="flex rounded-full bg-red-500 uppercase px-2 py-1 text-xs font-bold mr-3">ERROR</span>
+                        <span class="font-semibold mr-2 text-left flex-auto">{{ session('error') }}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                    {{-- <div
+                        class="alert absolute z-10 top-0 right-0 w-64 bg-gray-100 rounded-b-lg border-t-8 border-green-600 px-4 py-4 flex flex-col justify-around shadow-md dark:bg-white text-gray-700 dark:text-gray-700">
+                        <div class="flex justify-between items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            {{ session('error') }}
+                        </div>
+                    </div> --}}
+                    @php
+                        session()->forget('error');
+                    @endphp
+                @endif
+                @yield('content')
+            </main>
         </div>
-    @else --}}
-
+    </div>
 </body>
 
 </html>

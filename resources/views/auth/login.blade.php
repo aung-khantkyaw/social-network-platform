@@ -7,8 +7,10 @@
             <div class="p-4 bg-gray-300 rounded-lg shadow-xl w-1/2">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Log in</h2>
                 @foreach ($errors->all() as $error)
-                    <div class="text-red-600" role="alert">
-
+                    <div role="alert"
+                        class="w-full p-2 bg-red-800 rounded-full items-center text-red-100 leading-none lg:rounded-full flex lg:inline-flex">
+                        <span class="flex rounded-full bg-red-500 uppercase px-2 py-1 text-xs font-bold mr-3">ERROR</span>
+                        <span class="font-semibold mr-2 text-left flex-auto">Incorrect username or password! </span>
                     </div>
                 @endforeach
                 <form class="flex flex-col" method="POST" action="{{ route('login') }}">

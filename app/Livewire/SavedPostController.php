@@ -30,11 +30,12 @@ class SavedPostController extends Component
                 "url" => "/post/" .  $post->uuid
             ]);
             DB::commit();
+            session()->flash('success', 'Save post successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
+            session()->flash('error', 'Something went wrong');
             throw $th;
         }
-        session()->flash('message', 'Save post successfully.');
         return redirect()->back();
     }
 
@@ -45,11 +46,12 @@ class SavedPostController extends Component
             $save = SavedPost::where(["post_id" => $post_id, "user_id" => auth()->id()])->first();
             $save->delete();
             DB::commit();
+            session()->flash('success', 'Unsave post successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
+            session()->flash('error', 'Something went wrong');
             throw $th;
         }
-        session()->flash('message', 'Unsave Post successfully.');
         return redirect()->back();
     }
 }

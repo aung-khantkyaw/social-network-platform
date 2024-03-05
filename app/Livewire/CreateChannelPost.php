@@ -63,9 +63,11 @@ class CreateChannelPost extends Component
                     'position' => "general",
                 ]);
             }
+            session()->flash('success', 'Post created successfully.');
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
+            session()->flash('error', 'Something went wrong');
             throw $e;
         }
 
@@ -74,8 +76,6 @@ class CreateChannelPost extends Component
         unset($this->title);
         unset($this->content);
         unset($this->thumbnail);
-
-        session()->flash('message', 'Post created successfully.');
         return redirect()->back();
     }
 }

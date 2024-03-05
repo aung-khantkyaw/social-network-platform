@@ -32,12 +32,12 @@ class Peoples extends Component
                 "url" => "/friends"
             ]);
             DB::commit();
+            session()->flash('success', 'Friend request sent to ' . $user->username);
         } catch (\Exception $e) {
             DB::rollBack();
-            throw $e;
             session()->flash('error', 'Something went wrong');
+            throw $e;
         }
-        session()->flash('message', 'Friend request sent to ' . $user->username);
         return redirect()->back();
     }
 
@@ -52,12 +52,12 @@ class Peoples extends Component
                 'friend_id' => $id,
             ])->first()->delete();
             DB::commit();
+            session()->flash('success', 'Cancle Friend request sent to ' . $user->username);
         } catch (\Exception $e) {
             DB::rollBack();
-            throw $e;
             session()->flash('error', 'Something went wrong');
+            throw $e;
         }
-        session()->flash('friend_request', 'Cancle Friend request sent to ' . $user->username);
         return redirect()->back();
     }
 
@@ -81,12 +81,12 @@ class Peoples extends Component
                 "url" => "/friends"
             ]);
             DB::commit();
+            session()->flash('success', 'Accept Friend request From ' . $user->username);
         } catch (\Exception $e) {
             DB::rollBack();
-            throw $e;
             session()->flash('error', 'Something went wrong');
+            throw $e;
         }
-        session()->flash('message', 'Accept Friend request From ' . $user->username);
         return redirect()->back();
     }
 
@@ -103,12 +103,12 @@ class Peoples extends Component
             $req->status = "rejected";
             $req->save();
             DB::commit();
+            session()->flash('success', 'Reject Friend request From ' . $user->username);
         } catch (\Exception $e) {
             DB::rollBack();
-            throw $e;
             session()->flash('error', 'Something went wrong');
+            throw $e;
         }
-        session()->flash('message', 'Reject Friend request From ' . $user->username);
         return redirect()->back();
     }
 
@@ -127,7 +127,7 @@ class Peoples extends Component
             $friendship2->delete();
         }
 
-        session()->flash('message', 'Unfriend ' . $user->username);
+        session()->flash('success', 'You have successfully unfriend ' . $user->username);
         return redirect()->back();
     }
 }

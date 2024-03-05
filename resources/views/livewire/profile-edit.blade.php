@@ -4,6 +4,13 @@
     $users = App\Models\User::where('id', '!=', $user->id)->get();
 @endphp
 <div class="flex flex-col items-center">
+    @foreach ($errors->all() as $error)
+        <div role="alert"
+            class="w-full mb-2 p-2 bg-red-800 rounded-full items-center text-red-100 leading-none lg:rounded-full flex lg:inline-flex">
+            <span class="flex rounded-full bg-red-500 uppercase px-2 py-1 text-xs font-bold mr-3">ERROR</span>
+            <span class="font-semibold mr-2 text-left flex-auto">{{ $error }}</span>
+        </div>
+    @endforeach
     <div class="w-3/4 max-w-md bg-gray-100 rounded-lg shadow-xs dark:bg-gray-800 p-6 mt-2">
         <form class="flex flex-col" method="post" action="{{ route('profile.edit') }}" enctype="multipart/form-data">
             @csrf
@@ -274,9 +281,7 @@
 
     relationshipSelect.addEventListener("change", () => {
         if (relationshipSelect.value === "single") {
-            partnerInput.disabled = true;
-        } else {
-            partnerInput.disabled = false;
+            partnerInput.value = "";
         }
     });
 
@@ -285,10 +290,14 @@
         let users = @json($users);
         let user = users.find(user => user.username === partner);
         if (!user) {
+            partnerInput.classList.remove('dark:border-gray-600');
+            partnerInput.classList.add('border-2');
             partnerInput.classList.add('border-red-600');
             submitButton.disabled = true;
         } else {
+            partnerInput.classList.remove('border-2');
             partnerInput.classList.remove('border-red-600');
+            partnerInput.classList.add('dark:border-gray-600');
             submitButton.disabled = false;
         }
     }
