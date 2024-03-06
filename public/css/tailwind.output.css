@@ -548,6 +548,11 @@ video {
     margin-right: calc(1.5rem * var(--space-x-reverse));
     margin-left: calc(1.5rem * (1 - var(--space-x-reverse)));
 }
+.divide-x > :not(template) ~ :not(template) {
+    --divide-x-reverse: 0;
+    border-right-width: calc(1px * var(--divide-x-reverse));
+    border-left-width: calc(1px * (1 - var(--divide-x-reverse)));
+}
 .divide-y > :not(template) ~ :not(template) {
     --divide-y-reverse: 0;
     border-top-width: calc(1px * (1 - var(--divide-y-reverse)));

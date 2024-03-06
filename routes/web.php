@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\LineChartController;
 use App\Http\Controllers\ProfileController;
+use App\Livewire\AllUsers;
+use App\Livewire\ContactAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Home;
 use App\Livewire\Admin;
@@ -25,6 +27,8 @@ use App\Livewire\Squad;
 use App\Livewire\Squads;
 use App\Livewire\CreateSquad;
 use App\Livewire\MySquad;
+use Illuminate\Support\Facades\Auth;
+
 
 
 /*
@@ -41,6 +45,8 @@ use App\Livewire\MySquad;
 Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/home', Home::class)->name('home');
     Route::get('/admin', Admin::class)->name('admin');
+    Route::get('/contact-admin', ContactAdmin::class)->name('contact-admin');
+    Route::post('/contact.admin/{user:id}', [ContactAdmin::class, 'contact'])->name('contact.admin');
 
     Route::get('/profile/{user:username}', Profile::class)->name('profile.show');
     Route::get('/profile/{user:username}/edit', ProfileEdit::class)->name('profile-edit');
@@ -113,9 +119,15 @@ Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/mark-all-as-read', [Notification::class, 'markAllAsRead'])->name('mark-all-as-read');
 
     Route::get('/delete&ban/{post:uuid}', [ShowPost::class, 'deleteAndBan'])->name('delete&ban');
+    Route::get('/ban/{user:id}', [Admin::class, 'ban'])->name('admin.ban');
+    Route::get('/unban/{user:id}', [Admin::class, 'unban'])->name('admin.unban');
+    Route::get('/unlock/{user:id}', [Admin::class, 'unlock'])->name('admin.unlock');
+    Route::get('/all-users', AllUsers::class)->name('all-users');
 
-    // line chart
-    // Route::get('/line-chart', [LineChartController::class, 'lineChart'])->name('line-chart');
+    Route::get('/logout', function () {
+        Auth::logout();
+        return redirect()->route('login');
+    })->name('logout');
 });
 
 // Route::get('/', Home::class)->middleware(['auth', 'verified', 'VerifiedUser']);
@@ -136,7 +148,7 @@ Route::get('/terms-and-conditions', function () {
 })->name('terms-and-conditions');
 
 Route::get('/', function () {
-    // ...
+    return view('welcome');
 })->middleware('check.username');
 
 require __DIR__ . '/auth.php';

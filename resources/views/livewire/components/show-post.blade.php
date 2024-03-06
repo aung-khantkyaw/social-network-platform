@@ -108,17 +108,23 @@
             <div class="mt-4">
                 <form method="POST" action="{{ route('post.comment', $post->id, 'comment') }}">
                     @csrf
-
-                    <label class="w-full text-sm mt-4">
-                        <div class="relative text-gray-500 focus-within:text-purple-600">
-                            <input type="text" name="comment" id="comment"
-                                class="block w-full  mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                placeholder="Write your comment" />
-
-                            <button type="submit"
-                                class="w-24 absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">Comment</button>
+                    @if (auth()->user()->banned_to > now('Asia/Yangon'))
+                        <div
+                            class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg">
+                            You can't comment because your account is banned.
                         </div>
-                    </label>
+                    @else
+                        <label class="w-full text-sm mt-4">
+                            <div class="relative text-gray-500 focus-within:text-purple-600">
+                                <input type="text" name="comment" id="comment"
+                                    class="block w-full  mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                    placeholder="Write your comment" />
+
+                                <button type="submit"
+                                    class="w-24 absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">Comment</button>
+                            </div>
+                        </label>
+                    @endif
                 </form>
             </div>
 

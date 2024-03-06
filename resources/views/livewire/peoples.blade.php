@@ -7,8 +7,7 @@
 
     // $get_request = App\Models\Friend::where('friend_id', auth()->id())->get();
     $get_request = App\Models\Friend::where('friend_id', auth()->id())->where('status', 'pending')->get();
-
-    $suggestions = App\Models\User::where('id', '!=', auth()->id())->get();
+    $suggestions = App\Models\User::where('id', '!=', auth()->id())->where('username', '!=', 'snpoc_admin')->get();
 @endphp
 <div class="container px-6 mx-auto grid">
     <div class="my-4 flex justify-evenly">

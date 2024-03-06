@@ -50,7 +50,7 @@
 
     <div class="mt-4 p-4 rounded-lg bg-gray-100 shadow-md dark:bg-gray-700">
         <div class="flex justify-center">
-            <div class="notRead_section mt-2 w-1/2 ">
+            <div class="notRead_section mt-2 w-1/2 h-144 overflow-y-auto">
                 @forelse ($notReadNotifications as $notification)
                     @php
                         $senderName = strtok($notification->message, ' ');
@@ -58,7 +58,7 @@
                     @endphp
                     @if ($notificationFrom !== null)
                         <div
-                            class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
+                            class="w-full flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
                             <a href="{{ url($notification->url) }}" class="flex items-center w-2/3">
                                 <img src="{{ 'images/profiles/' . $notificationFrom->profile }}" alt="Avatar"
                                     class="w-12 h-12 rounded-full mr-4">
@@ -85,14 +85,14 @@
                     </div>
                 @endforelse
             </div>
-            <div class="hidden read_section mt-2 w-1/2 ">
+            <div class="hidden read_section mt-2 w-full h-144 overflow-y-auto">
                 @forelse ($ReadNotifications as $notification)
                     @php
                         $senderName = strtok($notification->message, ' ');
                         $notificationFrom = App\Models\User::where('username', $senderName)->first();
                     @endphp
                     @if ($notificationFrom !== null)
-                        <a class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
+                        <a class="w-1/2 mx-auto flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
                             href="{{ url($notification->url) }}">
                             <div class="flex items-center">
                                 <img src="{{ 'images/profiles/' . $notificationFrom->profile }}" alt="Avatar"

@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->boolean('is_private')->default(0);
             $table->boolean('is_banned')->default(0);
+            $table->timestamp('expiration_date')->nullable();
             $table->timestamp('banned_at')->nullable();
             $table->timestamp('banned_to')->nullable();
             $table->string('password');

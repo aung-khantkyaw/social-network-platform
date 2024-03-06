@@ -93,23 +93,33 @@ class ShowPost extends Component
 
     public function deleteAndBan($post_id)
     {
-        // dd($post_id);
         $post = Post::where('uuid', $post_id)->first();
         $user = User::where('id', $post->user_id)->first();
-
         $this->deletePost($post_id);
-        $user->update([
-            'banned_at' => now('Asia/Yangon'),
-            'banned_to' => now('Asia/Yangon')->addMinute(5)
-        ]);
+        if ($user->is_banned > 3) {
+            $user->update([
+                'is_private' => 1,
+            ]);
+            Notification::create([
+                "type" => "Temporary Lock",
+                "user_id" => $user->id,
+                "message" => $user->username . " You have been Temporary Lock.",
+                "url" => "logout"
+            ]);
+        } else {
+            $user->update([
+                'is_banned' => $user->is_banned + 1,
+                'banned_at' => now('Asia/Yangon'),
+                'banned_to' => now('Asia/Yangon')->addMinute(5)
+            ]);
 
-        Notification::create([
-            "type" => "Ban User",
-            "user_id" => $user->id,
-            "message" => $user->username . " You have been banned from the platform.",
-            "url" => "/profile/" . $user->username
-        ]);
-
+            Notification::create([
+                "type" => "Ban User",
+                "user_id" => $user->id,
+                "message" => $user->username . " You have been banned from the platform.",
+                "url" => "/profile/" . $user->username
+            ]);
+        }
         return redirect()->route('admin');
     }
 }

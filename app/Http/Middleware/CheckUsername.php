@@ -16,18 +16,13 @@ class CheckUsername
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->username == 'snpoc_admin') {
-            return redirect()->route('admin');
-        } else {
-            return redirect()->route('home');
-        }
 
-        return $next($request);
+        if (Auth::user() && Auth::user()->username == 'snpoc_admin') {
+            return redirect()->route('admin');
+        } elseif (Auth::user()) {
+            return redirect()->route('home');
+        } else {
+            return redirect()->route('login');
+        }
     }
 }
-
-// if (auth()->user()->username == 'snpoc_admin') {
-//     Route::get('/', Admin::class)->name('admin');
-// } else {
-//     Route::get('/', Home::class)->name('home');
-// }

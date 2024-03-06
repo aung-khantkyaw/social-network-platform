@@ -66,7 +66,7 @@
 
                     <span class="ml-4">Dashboard</span>
                 </a>
-                @if ($postType == 'post' || $postType == 'create-post' || $postType == '' || $postType == 'home')
+                @if ($postType == 'post' || $postType == 'create-post' || $postType == '' || $postType == 'home' || $postType == 'admin')
                     <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
                         aria-hidden="true"></span>
                 @endif
@@ -79,7 +79,7 @@
         <ul>
             <li class="relative px-6 py-1">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="">
+                    href="{{ route('all-users') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -88,7 +88,7 @@
 
 
                     <span class="ml-4">Users</span>
-                    @if ($postType == 'users')
+                    @if ($postType == 'all-users')
                         <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
                             aria-hidden="true"></span>
                     @endif

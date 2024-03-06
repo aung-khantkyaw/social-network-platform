@@ -4,11 +4,16 @@
     $posts = App\Models\Post::all();
     $channels = App\Models\Page::all();
     $squads = App\Models\Group::all();
+    $banned_users = App\Models\User::where('banned_to', '>', now('Asia/Yangon'))->get();
 
+    function lineNumber()
+    {
+        static $line = 1;
+        return $line++;
+    }
 @endphp
 <div class="container px-6 mx-auto grid">
     <div class="grid gap-6 my-8 md:grid-cols-2 xl:grid-cols-4">
-        <!-- Card -->
         <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
             <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
@@ -23,11 +28,10 @@
                     Total Users
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    {{ $users->count() }}
+                    {{ $users->count() - 1 }}
                 </p>
             </div>
         </div>
-        <!-- Card -->
         <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
             <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1025 1024" fill="currentColor" class="w-6 h-6">
@@ -44,7 +48,6 @@
                 </p>
             </div>
         </div>
-        <!-- Card -->
         <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
             <div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
@@ -61,7 +64,6 @@
                 </p>
             </div>
         </div>
-        <!-- Card -->
         <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
             <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
@@ -121,54 +123,49 @@
                 <thead>
                     <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                        <th class="px-4 py-3"></th>
                         <th class="px-4 py-3">User</th>
                         <th class="px-4 py-3">Banned At</th>
                         <th class="px-4 py-3">Banned To</th>
-                        <th class="px-4 py-3">Reason</th>
+                        <th class="px-4 py-3">Banned Times</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                    @foreach ($users as $user)
-                        @if ($user->banned_to > now('Asia/Yangon') && $user->username != 'snpoc_admin')
-                            <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3">
-                                    <div class="flex items-center text-sm">
-                                        <!-- Avatar with inset shadow -->
-                                        <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                                            <img class="object-cover w-full h-full rounded-full"
-                                                src="{{ asset('images/profiles/' . $user->profile) }}" alt=""
-                                                loading="lazy" />
-                                            <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true">
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold">{{ $user->first_name . ' ' . $user->last_name }}
-                                            </p>
-                                            <a href="{{ route('profile.show', $user->username) }}"
-                                                class="text-xs text-gray-600 dark:text-gray-400">
-                                                {{ '@' . $user->username }}
-                                            </a>
+                    @foreach ($banned_users as $user)
+                        <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3">
+                                {{ lineNumber() }}
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center text-sm">
+                                    <!-- Avatar with inset shadow -->
+                                    <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                                        <img class="object-cover w-full h-full rounded-full"
+                                            src="{{ asset('images/profiles/' . $user->profile) }}" alt=""
+                                            loading="lazy" />
+                                        <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true">
                                         </div>
                                     </div>
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    {{ $user->banned_at->format('d/m/Y') }}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    {{ $user->banned_to->format('d/m/Y') }}
-                                </td>
-                                <td class="px-4 py-3 text-xs">
-                                    {{ $user->reason }}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    @if ($user->created_at)
-                                        {{ $user->created_at->format('d/m/Y') }}
-                                    @endif
-                                </td>
-                            </tr>
-                        @else
-                            @continue
-                        @endif
+                                    <div>
+                                        <p class="font-semibold">{{ $user->first_name . ' ' . $user->last_name }}
+                                        </p>
+                                        <a href="{{ route('profile.show', $user->username) }}"
+                                            class="text-xs text-gray-600 dark:text-gray-400">
+                                            {{ '@' . $user->username }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $user->banned_at }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $user->banned_to }}
+                            </td>
+                            <td class="px-4 py-3 text-xs">
+                                {{ $user->is_banned }}
+                            </td>
+                        </tr>
                     @endforeach
 
 

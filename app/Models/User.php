@@ -39,6 +39,7 @@ class User extends Authenticatable
         'address',
         'is_private',
         'is_banned',
+        'expiration_date',
         'banned_at',
         'banned_to',
         'password',
