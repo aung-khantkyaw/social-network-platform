@@ -306,6 +306,14 @@ video {
         max-width: 1280px;
     }
 }
+.glass-morphic {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+    padding: 20px;
+    margin: 20px;
+}
 .form-input {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -1587,6 +1595,11 @@ video {
 
 .top-right-5 {
     top: 1.25rem;
+    right: 1.25rem;
+}
+
+.bottom-right-5 {
+    bottom: 1.25rem;
     right: 1.25rem;
 }
 

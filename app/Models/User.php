@@ -39,6 +39,8 @@ class User extends Authenticatable
         'address',
         'is_private',
         'is_banned',
+        'banned_at',
+        'banned_to',
         'password',
     ];
 

@@ -49,12 +49,12 @@
     </div>
     <div class="relative">
         <img src="{{ asset('images/squads/thumbnails/' . $squad->thumbnail) }}" alt="Cover photo"
-            class="w-full h-48 rounded-t-lg">
+            class="w-full h-72 rounded-t-lg">
     </div>
     <div class="bg-gray-100 p-4 rounded-lg shadow mt-4 dark:bg-gray-800 dark:text-gray-200">
         <hr class="my-3 dark:border-gray-600" />
         <div class="flex justify-between items-center p-4">
-            <div class="border-4 border-black bg-gray-100 rounded-full overflow-hidden dark:border-white">
+            <div class="border-4 border-black bg-gray-100 rounded-lg overflow-hidden dark:border-white">
                 <img src="{{ asset('images/squads/' . $squad->icon) }}" alt="Profile picture"
                     class="w-24 h-24 object-cover">
             </div>
@@ -74,8 +74,8 @@
                         Post
                     @endif
                 </span><br />
-                <span
-                    class="font-semibold text-sm text-gray-600 dark:text-gray-400">"__{{ $squad->description }}__"</span>
+                <span class="font-semibold text-sm text-gray-600 dark:text-gray-400">" {{ $squad->description }}
+                    "</span>
             </div>
             <div class="flex gap-6">
                 @if ($squad->user_id == auth()->id())

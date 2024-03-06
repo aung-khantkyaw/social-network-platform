@@ -10,6 +10,7 @@ use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SavedPost;
+use App\Models\User;
 
 class ShowPost extends Component
 {
@@ -88,5 +89,27 @@ class ShowPost extends Component
         $post->delete();
         session()->flash('success', 'Post deleted successfully');
         return redirect()->route('profile.show', Auth::user()->username);
+    }
+
+    public function deleteAndBan($post_id)
+    {
+        // dd($post_id);
+        $post = Post::where('uuid', $post_id)->first();
+        $user = User::where('id', $post->user_id)->first();
+
+        $this->deletePost($post_id);
+        $user->update([
+            'banned_at' => now('Asia/Yangon'),
+            'banned_to' => now('Asia/Yangon')->addMinute(5)
+        ]);
+
+        Notification::create([
+            "type" => "Ban User",
+            "user_id" => $user->id,
+            "message" => $user->username . " You have been banned from the platform.",
+            "url" => "/profile/" . $user->username
+        ]);
+
+        return redirect()->route('admin');
     }
 }

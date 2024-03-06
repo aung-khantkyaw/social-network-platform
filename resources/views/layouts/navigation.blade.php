@@ -28,12 +28,19 @@
         <ul class="flex items-center flex-shrink-0 space-x-6">
             <!-- New Post Button -->
             <li class="flex">
-                <a href="{{ route('create-post') }}">
-                    <button
-                        class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                @if (auth()->user()->banned_to > now('Asia/Yangon'))
+                    <div
+                        class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg">
                         New Post
-                    </button>
-                </a>
+                    </div>
+                @else
+                    <a href="{{ route('create-post') }}">
+                        <button
+                            class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            New Post
+                        </button>
+                    </a>
+                @endif
             </li>
             <!-- Theme toggler -->
             <li class="flex">

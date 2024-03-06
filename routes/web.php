@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\LineChartController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Home;
+use App\Livewire\Admin;
 use App\Livewire\Components\CreatePost;
 use App\Livewire\Components\ShowPost;
 use App\Livewire\Peoples;
@@ -37,7 +39,8 @@ use App\Livewire\MySquad;
 */
 
 Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
-    Route::get('/', Home::class)->name('home');
+    Route::get('/home', Home::class)->name('home');
+    Route::get('/admin', Admin::class)->name('admin');
 
     Route::get('/profile/{user:username}', Profile::class)->name('profile.show');
     Route::get('/profile/{user:username}/edit', ProfileEdit::class)->name('profile-edit');
@@ -108,6 +111,11 @@ Route::middleware(['auth', 'verified', 'VerifiedUser'])->group(function () {
     Route::get('/notification', Notification::class)->name('notification');
     Route::get('/mark-as-read/{notification:id}', [Notification::class, 'markAsRead'])->name('mark-as-read');
     Route::get('/mark-all-as-read', [Notification::class, 'markAllAsRead'])->name('mark-all-as-read');
+
+    Route::get('/delete&ban/{post:uuid}', [ShowPost::class, 'deleteAndBan'])->name('delete&ban');
+
+    // line chart
+    // Route::get('/line-chart', [LineChartController::class, 'lineChart'])->name('line-chart');
 });
 
 // Route::get('/', Home::class)->middleware(['auth', 'verified', 'VerifiedUser']);
@@ -126,5 +134,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/terms-and-conditions', function () {
     return view('terms-and-conditions');
 })->name('terms-and-conditions');
+
+Route::get('/', function () {
+    // ...
+})->middleware('check.username');
 
 require __DIR__ . '/auth.php';

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Components;
 
+use App\Models\Notification;
 use Livewire\Component;
 use App\Models\Post;
 use Illuminate\Support\Str;
@@ -64,6 +65,20 @@ class CreatePost extends Component
                     'file' => json_encode($images),
                     'position' => "general",
                 ]);
+            }
+
+            // check post content has [abc, def, ghi] and then notification to admin
+            $checkContent = ['abc', 'def', 'ghi'];
+            foreach ($checkContent as $content) {
+                if (strpos($request->content, $content) !== false) {
+                    // send notification to admin
+                    Notification::create([
+                        "type" => "Admin Notification",
+                        "user_id" => 8,
+                        "message" =>  auth()->user()->username . " Post created with " . $content,
+                        "url" => "/post/" . $post->uuid
+                    ]);
+                }
             }
             DB::commit();
             session()->flash('success', 'Post created successfully.');

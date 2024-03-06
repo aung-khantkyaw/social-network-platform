@@ -74,8 +74,8 @@
                         Post
                     @endif
                 </span><br />
-                <span
-                    class="font-semibold text-sm text-gray-600 dark:text-gray-400">"__{{ $channel->description }}__"</span>
+                <span class="font-semibold text-sm text-gray-600 dark:text-gray-400">" {{ $channel->description }}
+                    "</span>
             </div>
             <div class="flex gap-6">
                 @if ($channel->user_id == auth()->id())

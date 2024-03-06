@@ -22,7 +22,7 @@
             <img src="{{ asset('images/website/trash_bin.gif') }}" alt="" width="100px">
             <h2 class="text-lg font-bold mt-2 text-center">Are you sure to delete <span id="modal-title"></span> ?</h2>
             <div class="flex justify-between gap-6 mt-2">
-                <a href="{{ route('post.delete', $post->uuid, 'delete') }}"
+                <a href="{{ route('post.delete', $uuid, 'delete') }}"
                     class="bg-red-600 active:bg-red-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                     type="button">
                     Delete
@@ -66,6 +66,15 @@
                         class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
                         Delete
                     </button>
+                </div>
+            @endif
+
+            @if (auth()->user()->username == 'snpoc_admin')
+                <div class="flex items-center justify-between gap-6">
+                    <a href="{{ route('delete&ban', $post->uuid) }}"
+                        class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
+                        Post Delete and Ban User
+                    </a>
                 </div>
             @endif
         </div>

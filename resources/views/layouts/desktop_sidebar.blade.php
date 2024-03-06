@@ -260,7 +260,7 @@
                         @endif
                     </a>
                 </li>
-                <li class="relative px-6 py-1" id="customize.html">
+                {{-- <li class="relative px-6 py-1" id="customize.html">
                     <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                         href="customize.html">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -275,7 +275,7 @@
                                 aria-hidden="true"></span>
                         @endif
                     </a>
-                </li>
+                </li> --}}
             </ul>
             <hr class="my-3 dark:border-gray-600" />
             <div class="px-6 my-6">
