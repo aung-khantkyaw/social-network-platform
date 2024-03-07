@@ -51,14 +51,14 @@
     <section class="relative py-16 bg-gray-200">
         <div class="container mx-auto px-4">
             <div
-                class="relative flex flex-col min-w-0 break-words bg-teal-100 w-full mb-6 shadow-xl rounded-lg -mt-64 dark:bg-gray-800 dark:text-gray-200">
+                class="relative flex flex-col min-w-0 break-words bg-teal-100 w-full mb-6 shadow-xl rounded-lg -mt-48 dark:bg-gray-800 dark:text-gray-200">
                 <div class="px-6">
                     <div class="flex flex-wrap justify-center">
                         <div class="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                             <div class="relative">
                                 <img src="{{ asset('images/profiles/' . $user->profile) }}"
                                     class="shadow-xl rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-micro max-h-micro"
-                                    alt="">
+                                    alt="" width="150px" height="150px">
                             </div>
                         </div>
                         <div class="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
@@ -70,11 +70,11 @@
                                         Edit
                                     </a>
                                 @else
-                                    <button
+                                    <a href="{{ url('envoy', $user->id) }}"
                                         class="bg-blue-500 active:bg-blue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                                         type="button">
                                         Connect
-                                    </button>
+                                    </a>
                                 @endif
                             </div>
                         </div>

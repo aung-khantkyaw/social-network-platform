@@ -1193,6 +1193,12 @@ video {
     margin-left: -1.5rem;
     margin-right: -1.5rem;
 }
+.-mt-32 {
+    margin-top: -8rem;
+}
+.-mt-48 {
+    margin-top: -12rem;
+}
 .-mt-64 {
     margin-top: -16rem;
 }
@@ -1961,6 +1967,9 @@ video {
 }
 .w-64 {
     width: 16rem;
+}
+.w-128 {
+    width: 32rem;
 }
 .w-1\/4 {
     width: 25%;

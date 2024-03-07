@@ -1,8 +1,58 @@
+@php
+    $url = $_SERVER['REQUEST_URI'];
+    $parsedUrl = parse_url($url);
+    $path = $parsedUrl['path'];
+    $pathSegments = explode('/', $path);
+    $postType = $pathSegments[1];
+
+    $notifications = App\Models\Notification::where('user_id', auth()->id())
+        ->where('read_at', null)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+@endphp
+
+<script>
+    function accountDelete() {
+        document.getElementById('accountDelete').classList.remove('hidden');
+        document.getElementById('accountDelete').classList.add('flex');
+    }
+
+    function closeModal() {
+        document.getElementById('accountDelete').classList.remove('flex');
+        document.getElementById('accountDelete').classList.add('hidden');
+    }
+</script>
+<div id="accountDelete"
+    class=" hidden absolute z-10 center-absolute w-1/3 bg-red-100 border-t-8 border-red-600 rounded-b-lg px-4 py-4 flex-col justify-around shadow-md dark:bg-white text-gray-700 dark:text-gray-700">
+    <div class="flex flex-col justify-center items-center">
+        <img src="{{ asset('images/website/trash_bin.gif') }}" alt="" width="100px">
+        <h2 class="text-lg font-bold mt-2 text-center">Are you sure to delete <span
+                id="modal-title">{{ auth()->user()->username }}</span> ?</h2>
+        <span class="text-sm font-bold my-4">To confirm, type "{{ auth()->user()->username }}" in the box
+            below</span>
+        <input type="text" name="checkDeleteName" id="checkDeleteName" onblur="checkDeleteName()"
+            class="border-black bg-gray-300 block w-full mt-1 text-sm text-black focus:shadow-outline-gray form-input">
+        <div class="flex justify-between gap-6 mt-2">
+            <a href="" id="deleteAccount"
+                class="bg-red-600 active:bg-red-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                type="button">
+                Delete
+            </a>
+            <button
+                class="bg-gray-600 active:bg-gray-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                type="button" onclick="closeModal()">
+                Cancle
+            </button>
+        </div>
+    </div>
+</div>
 <!-- Mobile sidebar -->
 <!-- Backdrop -->
-<div x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150" x-transition:enter-start="opacity-0"
-    x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in-out duration-150"
-    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+<div x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
     class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"></div>
 
 <aside class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-gray-100 dark:bg-gray-800 md:hidden"
@@ -27,6 +77,10 @@
                     </svg>
                     <span class="ml-4">My Feed</span>
                 </a>
+                @if ($postType == 'post' || $postType == 'create-post' || $postType == '' || $postType == 'home')
+                    <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                        aria-hidden="true"></span>
+                @endif
             </li>
         </ul>
         <!-- <hr class="my-3 dark:border-gray-600" /> -->
@@ -34,18 +88,22 @@
         <ul>
             <li class="relative px-6 py-1" id="public_squad.html">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="public_squad.html">
+                    href="{{ route('squads') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                     </svg>
                     <span class="ml-4">Public Squads</span>
+                    @if ($postType == 'squads')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
                 </a>
             </li>
             <li class="relative px-6 py-1" id="my_squad.html">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="my_squad.html">
+                    href="{{ route('my-squads') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -53,15 +111,69 @@
                     </svg>
                     <span class="ml-4">My Squads</span>
                 </a>
+                @if ($postType == 'my-squads' || $postType == 'squad')
+                    <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                        aria-hidden="true"></span>
+                @endif
             </li>
             <li class="relative px-6 py-1" id="new_squad.html">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="new_squad.html">
+                    href="{{ route('create-squad') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
                     <span class="ml-4">New Squad</span>
+                    @if ($postType == 'create-squad')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
+                </a>
+            </li>
+        </ul>
+
+        <span class="px-3 my-3 font-bold text-xs text-black dark:text-gray-100">Channels</span>
+        <ul>
+            <li class="relative px-6 py-1" id="public_squad.html">
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    href="{{ route('channels') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="w-6 h-6">
+                        <path fill="currentColor"
+                            d="M10.871 1.015a.5.5 0 0 1 .364.606l-.25 1a.5.5 0 1 1-.97-.242l.25-1a.5.5 0 0 1 .606-.364Zm2.983 1.132a.5.5 0 0 1 0 .707l-1 1a.5.5 0 1 1-.707-.707l1-1a.5.5 0 0 1 .707 0Zm-7.57 10.886a2 2 0 0 0 3.63-1.605l-3.63 1.605Zm-.92.406l-.998.442a1.4 1.4 0 0 1-1.555-.29l-.4-.399a1.394 1.394 0 0 1-.293-1.548l3.871-8.808a1.4 1.4 0 0 1 2.269-.427l5.332 5.316a1.395 1.395 0 0 1-.422 2.264l-2.335 1.032a3 3 0 0 1-5.469 2.418ZM14.5 5h-1a.5.5 0 0 0 0 1h1a.5.5 0 1 0 0-1ZM6.905 3.238l-3.872 8.808a.394.394 0 0 0 .083.438l.401.4a.4.4 0 0 0 .444.082l8.802-3.892a.395.395 0 0 0 .12-.64l-5.33-5.318a.4.4 0 0 0-.647.12Z" />
+                    </svg>
+                    <span class="ml-4">Public Channels</span>
+                    @if ($postType == 'channels')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
+                </a>
+            </li>
+            <li class="relative px-6 py-1" id="my_squad.html">
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    href="{{ '/my-channels' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="w-6 h-6">
+                        <path fill="currentColor"
+                            d="M10.871 1.015a.5.5 0 0 1 .364.606l-.25 1a.5.5 0 1 1-.97-.242l.25-1a.5.5 0 0 1 .606-.364Zm2.983 1.132a.5.5 0 0 1 0 .707l-1 1a.5.5 0 1 1-.707-.707l1-1a.5.5 0 0 1 .707 0Zm-7.57 10.886a2 2 0 0 0 3.63-1.605l-3.63 1.605Zm-.92.406l-.998.442a1.4 1.4 0 0 1-1.555-.29l-.4-.399a1.394 1.394 0 0 1-.293-1.548l3.871-8.808a1.4 1.4 0 0 1 2.269-.427l5.332 5.316a1.395 1.395 0 0 1-.422 2.264l-2.335 1.032a3 3 0 0 1-5.469 2.418ZM14.5 5h-1a.5.5 0 0 0 0 1h1a.5.5 0 1 0 0-1ZM6.905 3.238l-3.872 8.808a.394.394 0 0 0 .083.438l.401.4a.4.4 0 0 0 .444.082l8.802-3.892a.395.395 0 0 0 .12-.64l-5.33-5.318a.4.4 0 0 0-.647.12Z" />
+                    </svg>
+                    <span class="ml-4">My Channels</span>
+                    @if ($postType == 'my-channels' || $postType == 'channel')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
+                </a>
+            </li>
+            <li class="relative px-6 py-1" id="new_squad.html">
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    href="{{ route('create-channel') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span class="ml-4">New Channel</span>
+                    @if ($postType == 'create-channel')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
                 </a>
             </li>
         </ul>
@@ -70,18 +182,22 @@
         <ul>
             <li class="relative px-6 py-1" id="chatting.html">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="chatting.html">
+                    href="{{ url('envoy') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
                     </svg>
                     <span class="ml-4">Chat</span>
+                    @if ($postType == 'chatting')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
                 </a>
             </li>
             <li class="relative px-6 py-1" id="notifications.html">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="notifications.html">
+                    href="{{ route('notification') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -89,6 +205,15 @@
                     </svg>
 
                     <span class="ml-4">Notifications</span>
+                    @if (count($notifications) > 0)
+                        <span
+                            class="ml-4 bg-red-600 px-2 rounded-md text-white font-bold">{{ $notifications->count() }}</span>
+                    @endif
+
+                    @if ($postType == 'notification')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
                 </a>
             </li>
             <li class="relative px-6 py-1" id="friends.html">
@@ -101,6 +226,10 @@
                     </svg>
 
                     <span class="ml-4">Friends</span>
+                    @if ($postType == 'friends')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
                 </a>
             </li>
         </ul>
@@ -117,11 +246,15 @@
                     </svg>
 
                     <span class="ml-4">Profile</span>
+                    @if ($postType == 'profile')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
                 </a>
             </li>
             <li class="relative px-6 py-1" id="save_posts.html">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="save_posts.html">
+                    href="{{ route('save-posts') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -129,18 +262,10 @@
                     </svg>
 
                     <span class="ml-4">Save Posts</span>
-                </a>
-            </li>
-            <li class="relative px-6 py-1" id="customize.html">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="customize.html">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-                    </svg>
-
-                    <span class="ml-4">Customize</span>
+                    @if ($postType == 'save-posts')
+                        <span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                    @endif
                 </a>
             </li>
         </ul>
@@ -149,11 +274,24 @@
         </li>
         </ul>
         <div class="px-6 my-6">
-            <button
+            <button onclick="accountDelete()"
                 class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">
-                Logout
+                Account Delete
                 <span class="ml-2" aria-hidden="true">-</span>
             </button>
         </div>
     </div>
 </aside>
+<script>
+    let checkInput = document.getElementById('checkDeleteName');
+    let deleteButton = document.getElementById('deleteAccount');
+    let checkName = @json(auth()->user()->username);
+
+    function checkDeleteName() {
+        if (checkInput.value === checkName) {
+            deleteButton.href = "{{ route('profile.delete', auth()->user()->username, 'delete') }}";
+        } else {
+            deleteButton.href = "";
+        }
+    }
+</script>
