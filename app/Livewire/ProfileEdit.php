@@ -24,7 +24,9 @@ class ProfileEdit extends Component
         DB::beginTransaction();
         try {
             $this->updateUser($user, $request);
-            $this->updateRelationship($user, $sender, $request);
+            if ($request->relationship != 'single') {
+                $this->updateRelationship($user, $sender, $request);
+            }
             DB::commit();
             session()->flash('success', 'Your profile has been updated.');
         } catch (\Exception $e) {

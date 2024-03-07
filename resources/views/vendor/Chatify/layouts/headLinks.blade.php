@@ -1,5 +1,5 @@
 <title>{{ config('chatify.name') }}</title>
-
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 {{-- Meta tags --}}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="id" content="{{ $id }}">
