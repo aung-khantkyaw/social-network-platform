@@ -10,15 +10,23 @@ To get started with Social Network, follow the steps below:
 
 Before you begin, ensure you have the following software installed on your local machine:
 
+<<<<<<< HEAD
 -   [PHP](https://www.php.net/) (recommended version: 7.4 or higher)
 -   [Composer](https://getcomposer.org/)
 -   [MySQL](https://www.mysql.com/) or [SQLite](https://www.sqlite.org/) for the database
 -   [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) for frontend assets
+=======
+- [PHP](https://www.php.net/) (recommended version: 7.4 or higher)
+- [Composer](https://getcomposer.org/)
+- [MySQL](https://www.mysql.com/) or [SQLite](https://www.sqlite.org/) for the database
+- [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) for frontend assets
+>>>>>>> c0e6dcebc0848399f695958e96b56952aca7e2d2
 
 ### Installation
 
 1. Clone the Social Network repository from GitHub:
 
+<<<<<<< HEAD
     ```bash
     git clone https://github.com/aung-khantkyaw/Social_Network.git
     ```
@@ -77,6 +85,66 @@ Before you begin, ensure you have the following software installed on your local
     ```bash
     npm run dev
     ```
+=======
+   ```bash
+   git clone https://github.com/aung-khantkyaw/Social_Network.git
+   ```
+
+2. Change into the project directory:
+
+   ```bash
+   cd Social_Network
+   ```
+
+3. Install PHP dependencies using Composer:
+
+   ```bash
+   composer install
+   ```
+
+4. Copy the `.env.example` file to `.env`:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+5. Generate an application key:
+
+   ```bash
+   php artisan key:generate
+   ```
+
+6. Configure your database connection settings in the `.env` file. You'll need to set the following variables:
+
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=your_database_host
+   DB_PORT=your_database_port
+   DB_DATABASE=your_database_name
+   DB_USERNAME=your_database_username
+   DB_PASSWORD=your_database_password
+   ```
+
+   Replace the placeholders with your actual database information.
+
+7. Migrate the database to create the necessary tables:
+
+   ```bash
+   php artisan migrate
+   ```
+
+8. Install JavaScript dependencies using npm:
+
+   ```bash
+   npm install
+   ```
+
+9. Compile frontend assets:
+
+   ```bash
+   npm run dev
+   ```
+>>>>>>> c0e6dcebc0848399f695958e96b56952aca7e2d2
 
 10. Start the development server:
 
@@ -92,8 +160,13 @@ The Social Network application is now available to you through your web browser.
 
 ## Acknowledgments
 
+<<<<<<< HEAD
 -   We are grateful that the Laravel community has created such a great PHP framework..
 -   We really appreciate the Social Network development team's dedication to this project.
+=======
+- We are grateful that the Laravel community has created such a great PHP framework..
+- We really appreciate the Social Network development team's dedication to this project.
+>>>>>>> c0e6dcebc0848399f695958e96b56952aca7e2d2
 
 For any issues or questions, please [open an issue on GitHub](https://github.com/aung-khantkyaw/Social_Network/issues).
 
